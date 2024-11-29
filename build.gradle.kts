@@ -22,6 +22,14 @@ dependencies {
     // Add ZXing dependencies for QR code generation.
     implementation("com.google.zxing:core:3.5.2")
     implementation("com.google.zxing:javase:3.5.2")
+
+    // https://mvnrepository.com/artifact/org.postgresql/postgresql
+    implementation("org.postgresql:postgresql:42.1.4")
+
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.2")
+
+
+
 }
 
 tasks.test {
