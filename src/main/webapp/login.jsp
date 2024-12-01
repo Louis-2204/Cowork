@@ -8,8 +8,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 
-<main class="flex-grow flex items-center justify-center bg-gray-100 min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md"> <!-- Augmenté de max-w-sm à max-w-md -->
+<main class="flex-grow flex items-center justify-center bg-gray-100 min-h-screen w-full">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md mb-20 my-20">
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
             <form class="space-y-6" action="#" method="POST">
                 <div>
@@ -27,7 +27,6 @@
                     </div>
                 </div>
 
-                <!-- Bouton centré -->
                 <div class="flex justify-center">
                     <button
                             type="submit"
@@ -39,7 +38,9 @@
 
             <p class="mt-10 text-center text-sm/6 text-gray-500">
                 Nouveau ?
-                <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Inscrit toi dès maintenant !</a>
+                <a href="${pageContext.request.contextPath}/inscription"
+                    class="font-semibold text-indigo-600 hover:text-indigo-500">
+                    Inscrit toi dès maintenant !</a>
             </p>
         </div>
     </div>
