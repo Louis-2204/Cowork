@@ -1,69 +1,55 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, db.DatabaseConnection" %>
 <%@ page import="cowork.User" %>
+
 <%
     String errorMessage = null;
     User loggedInUser = null;
 
     if ("POST".equalsIgnoreCase(request.getMethod())) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            // Récupérer la connexion via le singleton
-            connection = DatabaseConnection.getInstance();
+        try (Connection connection = DatabaseConnection.getInstance();
+             PreparedStatement preparedStatement = connection.prepareStatement(
+                     "SELECT * FROM users WHERE email = ? AND password = ?")) {
 
             // Récupérer les paramètres du formulaire de connexion
             String email = request.getParameter("email");
             String password = request.getParameter("password");
-
-            // Préparer la requête SQL
-            String query = "SELECT * FROM users WHERE email = ? AND password = ?";
-
-            preparedStatement = connection.prepareStatement(query);
 
             // Associer les paramètres
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, password);
 
             // Exécuter la requête
-            resultSet = preparedStatement.executeQuery();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    // Créer une instance de User
+                    loggedInUser = new User(
+                            resultSet.getString("email"),
+                            resultSet.getString("password")
+                    );
 
-            // Vérifier si un utilisateur correspondant a été trouvé
-            if (resultSet.next()) {
+                    // Stocker l'utilisateur dans la session
+                    request.getSession().setAttribute("loggedInUser", loggedInUser);
 
-                // Créer une instance de User
-                loggedInUser = new User(
-                        resultSet.getString("email"),
-                        resultSet.getString("password")
-                );
-
-                // Stocker l'utilisateur dans la session
-                session.setAttribute("loggedInUser", loggedInUser);
-
-                // Redirection vers accueil.jsp
-                response.sendRedirect(request.getContextPath() + "/accueil");
-                return; // Arrête l'exécution de la page actuelle
-            } else {
-                // Définit le message d'erreur
-                errorMessage = "Identifiant ou mot de passe incorrect.";
+                    response.sendRedirect(request.getContextPath() + "/accueil");
+                    return; // Arrêter l'exécution après la redirection
+                } else {
+                    // Définit le message d'erreur si les identifiants sont incorrects
+                    errorMessage = "Identifiant ou mot de passe incorrect.";
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
             errorMessage = "Erreur lors de la connexion : " + e.getMessage();
-        } finally {
-            // Libérer les ressources
-            try {
-                if (resultSet != null) resultSet.close();
-                if (preparedStatement != null) preparedStatement.close();
-                if (connection != null) connection.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
+
+    // Si erreur, transmettre l'erreur à la page
+    if (errorMessage != null) {
+        request.setAttribute("errorMessage", errorMessage);
+    }
 %>
+
 
 <main class="flex-grow flex items-center justify-center bg-gray-100 min-h-screen w-full">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md mb-20 my-20">
@@ -90,9 +76,9 @@
                     </button>
                 </div>
 
-                <% if (errorMessage != null) { %>
+                <% if (request.getAttribute("errorMessage") != null) { %>
                 <div class="text-red-600 text-center mt-4">
-                    <%= errorMessage %>
+                    Verifiez vos identifiants
                 </div>
                 <% } %>
             </form>
@@ -106,4 +92,3 @@
         </div>
     </div>
 </main>
-s
