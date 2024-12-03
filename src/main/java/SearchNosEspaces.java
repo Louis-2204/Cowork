@@ -16,17 +16,19 @@ public class SearchNosEspaces extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Récupérer les paramètres du formulaire
         String type = request.getParameter("type");
-        String dateDeb = request.getParameter("dateDeb");
-        String dateFin = request.getParameter("dateFin");
+        String date = request.getParameter("date");
+        String timeDeb = request.getParameter("timeDeb");
+        String timeFin = request.getParameter("timeFin");
 
         // Encoder les paramètres pour les inclure dans l'URL
         String encodedType = URLEncoder.encode(type, StandardCharsets.UTF_8);
-        String encodedDateDeb = URLEncoder.encode(dateDeb, StandardCharsets.UTF_8);
-        String encodedDateFin = URLEncoder.encode(dateFin, StandardCharsets.UTF_8);
+        String encodedDate = URLEncoder.encode(date, StandardCharsets.UTF_8);
+        String encodedTimeDeb = URLEncoder.encode(timeDeb, StandardCharsets.UTF_8);
+        String encodedTimeFin = URLEncoder.encode(timeFin, StandardCharsets.UTF_8);
 
         // Construire l'URL avec les paramètres de recherche
-        String redirectUrl = String.format("/cowork/nos-espaces?type=%s&dateDeb=%s&dateFin=%s",
-                encodedType, encodedDateDeb, encodedDateFin);
+        String redirectUrl = String.format("/cowork/nos-espaces?type=%s&date=%s&timeDeb=%s&timeFin=%s",
+                encodedType, encodedDate, encodedTimeDeb, encodedTimeFin);
 
         // Rediriger vers la page /nos-espaces avec les paramètres
         response.sendRedirect(redirectUrl);

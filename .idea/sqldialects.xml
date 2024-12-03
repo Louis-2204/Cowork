@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/sql/db.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/SubmitReservation.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/webapp/nos-espaces.jsp" dialect="GenericSQL" />
   </component>
 </project>

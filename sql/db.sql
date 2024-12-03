@@ -23,6 +23,7 @@ CREATE TABLE salles (
                         id_salle SERIAL PRIMARY KEY,
                         label VARCHAR(255) NOT NULL,
                         type_espace VARCHAR(255),
+                        description Text NOT NULL,
                         capacite INTEGER,
                         image_url VARCHAR(255) NOT NULL
 );

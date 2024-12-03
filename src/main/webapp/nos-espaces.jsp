@@ -5,67 +5,84 @@
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="cowork.Equipement" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.sql.Timestamp" %>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.PreparedStatement" %>
-<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.*" %>
 <%
     // Récupérer les paramètres de l'URL
     String type = request.getParameter("type");
-    String dateDeb = request.getParameter("dateDeb");
-    String dateFin = request.getParameter("dateFin");
+    String date = request.getParameter("date");
+    String timeDeb = request.getParameter("timeDeb");
+    String timeFin = request.getParameter("timeFin");
 
     // Initialisation des objets Timestamp
     Timestamp timestampDeb = null;
     Timestamp timestampFin = null;
 
-    // Si dateDeb n'est pas null et n'est pas vide, on le convertit en Timestamp
-    // Traitement de la dateDeb (date de début)
-    if (dateDeb != null && !dateDeb.trim().isEmpty()) {
+    // Si la date n'est pas nulle et non vide
+    if (date != null && !date.trim().isEmpty()) {
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-            Date parsedDateDeb = (Date) dateFormat.parse(dateDeb);
-            timestampDeb = new Timestamp(parsedDateDeb.getTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Erreur de format pour dateDeb : " + dateDeb);
-        }
-    }
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsedDate = dateFormat.parse(date);
 
-    if (dateFin != null && !dateFin.trim().isEmpty()) {
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-            Date parsedDateFin = (Date) dateFormat.parse(dateFin);
-            timestampFin = new Timestamp(parsedDateFin.getTime());
+            // Si les heures sont également fournies
+            if (timeDeb != null && !timeDeb.trim().isEmpty()) {
+                String dateTimeDeb = date + " " + timeDeb + ":00"; // Ajouter les secondes
+                SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                timestampDeb = new Timestamp(dateTimeFormat.parse(dateTimeDeb).getTime());
+            }
+
+            if (timeFin != null && !timeFin.trim().isEmpty()) {
+                String dateTimeFin = date + " " + timeFin + ":00"; // Ajouter les secondes
+                SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                timestampFin = new Timestamp(dateTimeFormat.parse(dateTimeFin).getTime());
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Erreur de format pour dateFin : " + dateFin);
+            System.out.println("Erreur de formatage pour la date ou l'heure : " + e.getMessage());
         }
-    } else {
-        timestampFin = new Timestamp(System.currentTimeMillis());
     }
 
     // Récupérer la connexion à la base de données
     Connection connection = DatabaseConnection.getInstance();
     PreparedStatement preparedStatement = null;
     ResultSet resultSalles = null;
-    ResultSet resultEquipements = null;
     ResultSet resultTypesEspaces = null;
+    ResultSet resultEquipements = null;
 
-    // Requête SQL pour récupérer les salles
-    String query = "SELECT * FROM salles WHERE type_espace LIKE ? AND id_salle NOT IN (SELECT id_salle FROM users_salles WHERE timestamp_deb >= ? AND timestamp_fin <= ?)";
+    try {
+        // Construire la requête SQL
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM salles WHERE 1=1");
 
-    // Préparer la requête
-    preparedStatement = connection.prepareStatement(query);
-    preparedStatement.setString(1, type);
-    preparedStatement.setTimestamp(2, timestampDeb);
-    preparedStatement.setTimestamp(3, timestampFin);
+        // Ajouter la condition pour le type d'espace
+        if (type != null && !type.trim().isEmpty()) {
+            queryBuilder.append(" AND type_espace LIKE ?");
+        }
 
-    // Exécuter la requête
-    resultSalles = preparedStatement.executeQuery();
+        // Ajouter les conditions pour la disponibilité
+        if (timestampDeb != null && timestampFin != null) {
+            queryBuilder.append(" AND id_salle NOT IN (");
+            queryBuilder.append(" SELECT id_salle FROM users_salles WHERE ");
+            queryBuilder.append(" (timestamp_deb < ? AND timestamp_fin > ?)");
+            queryBuilder.append(")");
+        }
 
-    // Créer la liste des salles
-    ArrayList<Salle> salles = new ArrayList<>();
+        // Préparer la requête
+        preparedStatement = connection.prepareStatement(queryBuilder.toString());
+
+        // Ajouter les paramètres
+        int paramIndex = 1;
+        if (type != null && !type.trim().isEmpty()) {
+            preparedStatement.setString(paramIndex++, "%" + type + "%");
+        }
+        if (timestampDeb != null && timestampFin != null) {
+            preparedStatement.setTimestamp(paramIndex++, timestampFin); // timestamp_fin > timestampDeb
+            preparedStatement.setTimestamp(paramIndex++, timestampDeb); // timestamp_deb < timestampFin
+        }
+
+        // Exécuter la requête
+        resultSalles = preparedStatement.executeQuery();
+
+        // Créer la liste des salles
+        ArrayList<Salle> salles = new ArrayList<>();
 
     // Parcourir les résultats
     while (resultSalles.next()) {
@@ -109,6 +126,25 @@
         String type_espace = resultTypesEspaces.getString("type_espace");
         typesEspaces.add(type_espace);
     }
+
+        // Passer les types à la JSP
+        request.setAttribute("typesEspaces", typesEspaces);
+        request.setAttribute("salles", salles);
+
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw new ServletException("Erreur lors de la récupération des données.", e);
+    } finally {
+        if (resultSalles != null) resultSalles.close();
+        if (resultTypesEspaces != null) resultTypesEspaces.close();
+        if (preparedStatement != null) preparedStatement.close();
+    }
+%>
+
+<%
+    ArrayList<String> typesEspaces = (ArrayList<String>) request.getAttribute("typesEspaces");
+    ArrayList<Salle> salles = (ArrayList<Salle>) request.getAttribute("salles");
 %>
 
 <div class="w-full bg-gray-500 flex justify-center">
@@ -120,9 +156,10 @@
             <option class="bg-white text-cow_text" <%= type_espace.equals(type) ? "selected" : "" %> value="<%= type_espace %>"><%= type_espace %></option>
             <% } %>
         </select>
-        <input value="<%= dateDeb %>" type='datetime-local' name='dateDeb' class="bg-white/30 text-white ps-2 w-full h-[40px]">
-        <input value="<%= dateFin %>" type='datetime-local' name='dateFin' class="bg-white/30 text-white ps-2 w-full h-[40px]">
-        <button name='accueil-submit' type="submit" class='bg-cow_secondary w-full rounded-sm text-white px-4 py-2 font-semibold '>
+        <input value="<%= date %>" type='date' name='date' class="bg-white/30 text-white ps-2 w-full h-[40px]">
+        <input value="<%= timeDeb %>" type='time' name='timeDeb' class="bg-white/30 text-white ps-2 w-full h-[40px]">
+        <input value="<%= timeFin %>" type='time' name='timeFin' class="bg-white/30 text-white ps-2 w-full h-[40px]">
+        <button name='espaces-submit' type="submit" class='bg-cow_secondary w-full rounded-sm text-white px-4 py-2 font-semibold '>
             Rechercher
         </button>
     </form>
@@ -133,8 +170,8 @@
     <div class="w-full max-w-[1300px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
 
         <% for (Salle salle : salles) { %>
-        <a href="${pageContext.request.contextPath}/salle/<%=salle.getId_salle()%>" class="bg-white rounded-md border flex flex-col">
-            <img src="/cowork/assets/salle.png" alt="Espace" class="w-full h-40 object-cover rounded-t-md">
+        <a href="${pageContext.request.contextPath}/salle?id=<%=salle.getId_salle()%>" class="bg-white rounded-md border flex flex-col">
+            <img src="<%=salle.getImage_url()%>" alt="Espace" class="w-full h-40 object-cover rounded-t-md">
             <div class="flex flex-col py-3 px-5 gap-2 w-full">
                 <div class="text-sm text-gray-500">
                     <%= salle.getType_espace() %>
