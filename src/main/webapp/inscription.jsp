@@ -1,3 +1,58 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*, db.DatabaseConnection" %>
+<%@ page import="cowork.User" %>
+<%
+  // Message d'erreur ou de succès
+  String message = null;
+
+  // Vérifiez si le formulaire a été soumis
+  if ("POST".equalsIgnoreCase(request.getMethod())) {
+    // Récupérer les données du formulaire
+    String nom = request.getParameter("nom");
+    String prenom = request.getParameter("prenom");
+    String email = request.getParameter("email");
+    String password = request.getParameter("password");
+    String entreprise = request.getParameter("entreprise");
+    String secteurActivite = request.getParameter("secteur_activite");
+
+    // Vérifiez si les champs sont valides
+    if (nom == null || prenom == null || email == null || password == null || entreprise == null || secteurActivite == null ||
+            nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || password.isEmpty() || entreprise.isEmpty() || secteurActivite.isEmpty()) {
+      message = "Tous les champs sont obligatoires.";
+    } else {
+      try (Connection connection = DatabaseConnection.getInstance();
+           PreparedStatement preparedStatement = connection.prepareStatement(
+                   "INSERT INTO users (nom, prenom, email, password, entreprise, secteur_activite) VALUES (?, ?, ?, ?, ?, ?)")) {
+
+        // Associez les paramètres
+        preparedStatement.setString(1, nom);
+        preparedStatement.setString(2, prenom);
+        preparedStatement.setString(3, email);
+        preparedStatement.setString(4, password);
+        preparedStatement.setString(5, entreprise);
+        preparedStatement.setString(6, secteurActivite);
+
+        // Exécutez la requête
+        int rowsAffected = preparedStatement.executeUpdate();
+        if (rowsAffected > 0) {
+          message = "Inscription réussie. Vous pouvez vous connecter.";
+        } else {
+          message = "Erreur lors de l'inscription. Veuillez réessayer.";
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+        if (e.getMessage().contains("Duplicate entry")) {
+          message = "Cet email est déjà utilisé.";
+        } else {
+          message = "Erreur lors de la connexion à la base de données.";
+        }
+      }
+    }
+  }
+%>
+
+
+
 <main class="flex-grow flex items-center justify-center bg-gray-100 min-h-screen w-full">
   <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md mb-20 my-20">
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
