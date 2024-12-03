@@ -25,12 +25,6 @@
                placeholder="John" required>
       </div>
 
-      <!-- Date de naissance -->
-      <div class="mb-4">
-        <label for="date_naissance" class="block text-sm font-medium text-gray-700">Date de naissance</label>
-        <input type="date" id="date_naissance" name="date_naissance" class="block w-full rounded-md bg-gray-200 px-3 py-1.5 text-base text-gray-500 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 focus:transition-all focus:duration-200 sm:text-sm" required>
-      </div>
-
       <!-- Entreprise -->
       <div class="mb-4">
         <label for="entreprise" class="block text-sm font-medium text-gray-700">Entreprise</label>

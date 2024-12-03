@@ -50,14 +50,25 @@
                     <li class="hover:bg-gray-200 rounded-md">
 						<a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/FAQ">FAQ</a>
                     </li>
+
+
+                    <c:if test="${not empty sessionScope.loggedInUser}">
+                        <li>
+                            <span class="w-full p-2 flex justify-center items-center text-green-500">
+                                ${sessionScope.loggedInUser.email} <!-- Récuperation de l'email dans l'instance User -->
+                            </span>
+                        </li>
+                    </c:if>
                 </ul>
+
+
             </div>
-            <div class="w-full md:w-fit flex justify-end items-center">
-                <a class="bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold"
-                   href="${pageContext.request.contextPath}/login">
-                    Se connecter
-                </a>
-            </div>
+                <div class="w-full md:w-fit flex justify-end items-center">
+                    <a class="bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold"
+                       href="${pageContext.request.contextPath}/login">
+                        Se connecter
+                    </a>
+                </div>
         </div>
     </nav>
 	<div id="menu-sm" class="w-full flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 h-0 overflow-hidden">
