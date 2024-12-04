@@ -12,26 +12,6 @@
     // Récupérer la connexion via le singleton
     connection = DatabaseConnection.getInstance();
 
-//    public Post(String id_post, String content, String created_at, String id_parent, String id_user, User user, ArrayList<Post> answers) {
-//    this.id_post = id_post;
-//    this.content = content;
-//    this.created_at = created_at;
-//    this.id_parent = id_parent;
-//    this.id_user = id_user;
-//    this.user = user;
-//    this.answers = answers;
-//    }
-
-//    public User(String id_user, String nom, String prenom, String email, String password, String entreprise, String secteur_activite) {
-//    this.id_user = id_user;
-//    this.nom = nom;
-//    this.prenom = prenom;
-//    this.email = email;
-//    this.password = password;
-//    this.entreprise = entreprise;
-//    this.secteur_activite = secteur_activite;
-//    }
-
     // Initialisation de la requête SQL de base
     String queryMainPosts = "SELECT * FROM posts p JOIN users u ON p.id_user = u.id_user WHERE p.id_parent IS NULL ORDER BY p.created_at DESC";
 
