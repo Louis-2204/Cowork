@@ -4,7 +4,7 @@
 <%
     Post answer = (Post) request.getAttribute("answer");
 %>
-<div class="bg-white rounded-md flex flex-col gap-2 pl-10 pt-2">
+<div class="flex flex-col gap-2 p-3">
     <div class="flex gap-2 w-full items-center">
         <div class="h-7 w-7 bg-gray-300 rounded-full flex items-center justify-center">
             <%-- GET FIRST LETTER OF FIRST NAME AND LAST NAME --%>
