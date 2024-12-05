@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${pageTitle}</title>
+    <link rel="stylesheet" href="./index.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -42,7 +43,10 @@
 						<a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/accueil">Accueil</a>
 					</li>
                     <li class="hover:bg-gray-200 rounded-md">
-                        <a class="w-full p-2 flex justify-center items-center" href="nos-espaces">Espaces</a>
+                        <a class="w-full p-2 flex justify-center items-center" href="nos-espaces?type=%25&dateDeb=&dateFin=">Espaces</a>
+                    </li>
+                    <li class="hover:bg-gray-200 rounded-md">
+                        <a class="w-full p-2 flex justify-center items-center" href="nos-forfaits">Forfaits</a>
                     </li>
                     <li class="hover:bg-gray-200 rounded-md">
                         <a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/forum">Forum</a>

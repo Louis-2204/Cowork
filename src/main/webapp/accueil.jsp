@@ -1,5 +1,45 @@
+<%@ page import="java.sql.Connection" %>
+<%@ page import="db.DatabaseConnection" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
 
+    // Récupérer la connexion à la base de données
+    Connection connection = DatabaseConnection.getInstance();
+    PreparedStatement preparedStatement = null;
+    ResultSet resultTypesEspaces = null;
+
+    try {
+
+        // Requête SQL pour récupérer les type_espace
+        String queryTypesEspaces = "SELECT distinct type_espace FROM salles";
+        preparedStatement = connection.prepareStatement(queryTypesEspaces);
+        resultTypesEspaces = preparedStatement.executeQuery();
+
+        // Créer la liste des types d'espaces
+        ArrayList<String> typesEspaces = new ArrayList<>();
+
+        // Parcourir les résultats
+        while (resultTypesEspaces.next()) {
+            String type_espace = resultTypesEspaces.getString("type_espace");
+            typesEspaces.add(type_espace);
+        }
+
+        // Passer les types à la JSP
+        request.setAttribute("typesEspaces", typesEspaces);
+
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw new ServletException("Erreur lors de la récupération des données.", e);
+    } finally {
+        if (resultTypesEspaces != null) resultTypesEspaces.close();
+        if (preparedStatement != null) preparedStatement.close();
+    }
+%>
+<% ArrayList<String> typesEspaces = (ArrayList<String>) request.getAttribute("typesEspaces"); %>
 
 <div class="w-full h-[calc(100svh-56px)] bg-cow_bg_dark flex justify-center">
     <div class="w-full max-w-[1300px] flex flex-col gap-4 items-center justify-center text-white relative">
@@ -7,19 +47,21 @@
         <div class="z-10 flex flex-col items-center justify-center gap-4">
             <h1 class='text-3xl md:text-5xl font-bold text-center'>Co-Working. Réunions. Brainstorming.</h1>
             <p>Louer le lieu idéal en quelques cliques.</p>
-            <form class="z-10">
+            <form method="post" action="${pageContext.request.contextPath}/SearchNosEspaces">
                 <div class="flex flex-col w-[calc(100svw-100px)] md:w-auto md:flex-row items-center gap-1 p-1 rounded-md bg-white/40 mt-12">
-                    <select name="type" class="bg-white/30 text-white ps-2 w-full md:w-auto h-[40px]">
-                        <option class="bg-white text-cow_text " value="co-working">Co-Working</option>
-                        <option class="bg-white text-cow_text" value="openspace">OpenSpace</option>
-                        <option class="bg-white text-cow_text" value="bureau-prive">Bureaux privés</option>
-                    </select>
-                    <input type='date' name='dateDeb' class="bg-white/30 text-white ps-2 w-full md:w-auto h-[40px]">
-                    <input type='date' name='dateFin' class="bg-white/30 text-white ps-2 w-full md:w-auto h-[40px]">
-                    <button name='accueil-submit'
-                            class='bg-cow_secondary w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold '>
-                        Rechercher
-                    </button>
+                <select name="type" class="bg-white/30 text-white ps-2 w-full md:w-auto h-[40px]">
+                    <option class="bg-white text-cow_text" <%=typesEspaces.isEmpty() ? "selected" : "" %> value="%">Tous</option>
+                    <% for (String type_espace : typesEspaces) { %>
+                    <%--            if type_espace === type then display an option tag with the selected attribute set to selected otherwise display an option tag without the selected attribute--%>
+                    <option class="bg-white text-cow_text" value="<%= type_espace %>"><%= type_espace %></option>
+                    <% } %>
+                </select>
+                <input type='date' name='date' class="bg-white/30 text-white ps-2 w-full h-[40px]">
+                <input type='time' name='timeDeb' class="bg-white/30 text-white ps-2 w-full h-[40px]">
+                <input type='time' name='timeFin' class="bg-white/30 text-white ps-2 w-full h-[40px]">
+                <button name='accueil-submit' type="submit" class='bg-cow_secondary w-full rounded-sm text-white px-4 py-2 font-semibold '>
+                    Rechercher
+                </button>
                 </div>
             </form>
         </div>
