@@ -21,8 +21,8 @@ public class Equipement {
         this.id_equipement = id_equipement;
     }
 
-        return label;
     public String getLabel() {
+        return label;
     }
 
     public void setLabel(String label) {

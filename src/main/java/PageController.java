@@ -3,13 +3,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 /**
  * Servlet implementation class PageController
  */
-@WebServlet({"/accueil", "/nos-espaces", "/forum", "/FAQ", "/mes-reservations", "/salle", "/nos-forfaits", "/forfait"})
-@WebServlet({"/accueil", "/nos-espaces", "/forum", "/FAQ", "/mes-reservations", "/login", "/inscription","/annuaire-client"})
+@WebServlet({"/accueil", "/nos-espaces", "/forum", "/FAQ", "/mes-reservations", "/salle", "/nos-forfaits", "/forfait", "/login", "/inscription", "/annuaire-client", "/admin/gestion-espaces"})
 public class PageController extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
@@ -68,7 +68,10 @@ public class PageController extends HttpServlet {
                     Title = "Erreur 404";
                 }
                 break;
-            default:
+            case "/admin/gestion-espaces":
+                page = "/admin/gestion-espaces.jsp";
+                Title = "Gestion Espaces";
+                break;
             case "/login":
                 page = "/login.jsp";
                 Title = "Login";
@@ -81,8 +84,7 @@ public class PageController extends HttpServlet {
                 page = "/annuaire-client.jsp";
                 Title = "Annuaire Client";
                 break;
-
-                default:
+            default:
                 page = "/404.jsp"; // Page par défaut ou erreur
                 Title = "Erreur 404";
         }

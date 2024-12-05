@@ -44,7 +44,7 @@
                         resultSet.getString("id_parent"),
                         resultSet.getString("id_user"),
                         new User(
-                                resultSet.getString("id_user"),
+                                resultSet.getInt("id_user"),
                                 resultSet.getString("nom"),
                                 resultSet.getString("prenom"),
                                 resultSet.getString("email"),
@@ -86,7 +86,7 @@
                         resultSet.getString("id_parent"),
                         resultSet.getString("id_user"),
                         new User(
-                                resultSet.getString("id_user"),
+                                resultSet.getInt("id_user"),
                                 resultSet.getString("nom"),
                                 resultSet.getString("prenom"),
                                 resultSet.getString("email"),
@@ -118,7 +118,7 @@
                             resultSetAnswers.getString("id_parent"),
                             resultSetAnswers.getString("id_user"),
                             new User(
-                                    resultSetAnswers.getString("id_user"),
+                                    resultSetAnswers.getInt("id_user"),
                                     resultSetAnswers.getString("nom"),
                                     resultSetAnswers.getString("prenom"),
                                     resultSetAnswers.getString("email"),
