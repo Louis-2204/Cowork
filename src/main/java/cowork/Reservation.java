@@ -1,47 +1,70 @@
 package cowork;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Reservation {
 
-    private String id;
-    private String type;
-    private String name;
-    private String date;
+    private String id_user;
+    private String id_salle;
+    private Timestamp timestamp_deb;
+    private Timestamp timestamp_fin;
     private String code;
-    private List<String> tags;
+    private ArrayList<Equipement> equipements;
+    private Salle salle;
 
-    public Reservation(String id, String type, String name, String date, String code, List<String> tags) {
-        this.id = id;
-        this.type = type;
-        this.name = name;
-        this.date = date;
+    public Reservation(String id_user, String id_salle, Timestamp timestamp_deb, Timestamp timestamp_fin, String code, ArrayList<Equipement> equipements, Salle salle) {
+        this.id_user = id_user;
+        this.id_salle = id_salle;
+        this.timestamp_deb = timestamp_deb;
+        this.timestamp_fin = timestamp_fin;
         this.code = code;
-        this.tags = tags;
+        this.equipements = equipements;
+        this.salle = salle;
     }
 
-    public String getId() {
-        return id;
+    public String getIdUser() {
+        return id_user;
     }
 
-    public String getType() {
-        return type;
+    public String getIdSalle() {
+        return id_salle;
     }
 
-    public String getName() {
-        return name;
+    public Timestamp getTimestampDeb() {
+        return timestamp_deb;
     }
 
-    public String getDate() {
-        return date;
+    public Timestamp getTimestampFin() {
+        return timestamp_fin;
     }
 
     public String getCode() {
         return code;
     }
 
-    public List<String> getTags() {
-        return tags;
+    public ArrayList<Equipement> getEquipements() {
+        return equipements;
     }
 
+    public Salle getSalle() {
+        return salle;
+    }
+
+    public void setIdUser(String id_user) {
+        this.id_user = id_user;
+    }
+
+    public void setIdSalle(String id_salle) {
+        this.id_salle = id_salle;
+    }
+
+    public void setTimestampDeb(Timestamp timestamp_deb) {
+        this.timestamp_deb = timestamp_deb;
+    }
+
+    public void setTimestampFin(Timestamp timestamp_fin) {
+        this.timestamp_fin = timestamp_fin;
+    }
 }

@@ -4,6 +4,10 @@ public class Equipement {
     private int id_equipement;
     private String label;
 
+    public Equipement(String label) {
+        this.label = label;
+    }
+
     public Equipement(int id_equipement, String label) {
         this.id_equipement = id_equipement;
         this.label = label;
@@ -17,8 +21,8 @@ public class Equipement {
         this.id_equipement = id_equipement;
     }
 
-    public String getLabel() {
         return label;
+    public String getLabel() {
     }
 
     public void setLabel(String label) {

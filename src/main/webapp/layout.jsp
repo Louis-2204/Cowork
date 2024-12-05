@@ -27,21 +27,25 @@
     <nav class='w-full max-w-[1300px] flex flex-col md:flex-row items-center p-2 h-[56px]'>
         <div class="relative bg-transparent w-full h-full md:w-3/12 flex justify-center md:justify-start items-center">
             <p class='text-2xl font-bold text-cow_text'>CoWork</p>
-			<button class="md:hidden absolute right-0" onclick="toggleMenu()">
-				<svg id="buttonMenuOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-7 w-7 text-cow_text">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-				</svg>
-				<svg id="buttonMenuClose" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-7 w-7 text-cow_text hidden">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-				</svg>
-			</button>
+            <button class="md:hidden absolute right-0" onclick="toggleMenu()">
+                <svg id="buttonMenuOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5" stroke="currentColor" class="h-7 w-7 text-cow_text">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                </svg>
+                <svg id="buttonMenuClose" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     stroke-width="1.5" stroke="currentColor" class="h-7 w-7 text-cow_text hidden">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                </svg>
+            </button>
         </div>
         <div class="w-full md:w-9/12 flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 h-0 md:h-auto overflow-hidden">
             <div class="w-full md:w-6/12 min-w-fit">
                 <ul class='list-none flex flex-col md:flex-row gap-6 items-center justify-end text-base'>
-					<li class="hover:bg-gray-200 rounded-md">
-						<a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/accueil">Accueil</a>
-					</li>
+                    <li class="hover:bg-gray-200 rounded-md">
+                        <a class="w-full p-2 flex justify-center items-center"
+                           href="${pageContext.request.contextPath}/accueil">Accueil</a>
+                    </li>
                     <li class="hover:bg-gray-200 rounded-md">
                         <a class="w-full p-2 flex justify-center items-center" href="nos-espaces?type=%25&dateDeb=&dateFin=">Espaces</a>
                     </li>
@@ -49,43 +53,51 @@
                         <a class="w-full p-2 flex justify-center items-center" href="nos-forfaits">Forfaits</a>
                     </li>
                     <li class="hover:bg-gray-200 rounded-md">
-                        <a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/forum">Forum</a>
+                        <a class="w-full p-2 flex justify-center items-center"
+                           href="${pageContext.request.contextPath}/forum">Forum</a>
                     </li>
                     <li class="hover:bg-gray-200 rounded-md">
-						<a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/FAQ">FAQ</a>
+                        <a class="w-full p-2 flex justify-center items-center"
+                           href="${pageContext.request.contextPath}/FAQ">FAQ</a>
                     </li>
                 </ul>
             </div>
             <div class="w-full md:w-fit flex justify-end items-center">
-                <button class='bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold'>
-					Se connecter
-                </button>
+                <a href="${pageContext.request.contextPath}/login">
+                    <button class='bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold'>
+                        Se connecter
+                    </button>
+                </a>
             </div>
         </div>
     </nav>
-	<div id="menu-sm" class="w-full flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 h-0 overflow-hidden">
-		<div class="w-full md:w-6/12 ">
-			<ul class='list-none flex flex-col md:flex-row gap-2 items-center justify-center text-base'>
-				<li class="w-full hover:bg-gray-200 rounded-sm">
-					<a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/accueil">Accueil</a>
-				</li>
-				<li class="w-full hover:bg-gray-200 rounded-sm">
-					<a class="w-full p-2 flex justify-center items-center" href="nos-espaces">Espaces</a>
-				</li>
-				<li class="w-full hover:bg-gray-200 rounded-sm">
-					<a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/forum">Forum</a>
-				</li>
-				<li class="w-full hover:bg-gray-200 rounded-sm">
-					<a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/FAQ">FAQ</a>
-				</li>
-			</ul>
-		</div>
-		<div class="w-full md:w-3/12 flex justify-end items-center">
-			<button class='bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold '>Se
-				connecter
-			</button>
-		</div>
-	</div>
+    <div id="menu-sm"
+         class="w-full flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 h-0 overflow-hidden">
+        <div class="w-full md:w-6/12 ">
+            <ul class='list-none flex flex-col md:flex-row gap-2 items-center justify-center text-base'>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a class="w-full p-2 flex justify-center items-center"
+                       href="${pageContext.request.contextPath}/accueil">Accueil</a>
+                </li>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a class="w-full p-2 flex justify-center items-center" href="nos-espaces">Espaces</a>
+                </li>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a class="w-full p-2 flex justify-center items-center"
+                       href="${pageContext.request.contextPath}/forum">Forum</a>
+                </li>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a class="w-full p-2 flex justify-center items-center"
+                       href="${pageContext.request.contextPath}/FAQ">FAQ</a>
+                </li>
+            </ul>
+        </div>
+        <div class="w-full md:w-3/12 flex justify-end items-center">
+            <button class='bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold '>Se
+                connecter
+            </button>
+        </div>
+    </div>
 </header>
 
 <main class='w-full flex flex-col items-center'>
@@ -110,22 +122,22 @@
 </body>
 
 <script>
-	function toggleMenu() {
-		const menu = document.getElementById('menu-sm');
-		const buttonMenuOpen = document.getElementById('buttonMenuOpen');
-		const buttonMenuClose = document.getElementById('buttonMenuClose');
-		if (menu.classList.contains('h-0')) {
-			menu.classList.remove('h-0');
-			menu.style.height = 'auto';
-			buttonMenuOpen.classList.add('hidden');
-			buttonMenuClose.classList.remove('hidden');
-		} else {
-			menu.classList.add('h-0');
-			menu.style.height = '0px';
-			buttonMenuOpen.classList.remove('hidden');
-			buttonMenuClose.classList.add('hidden');
-		}
-	}
+    function toggleMenu() {
+        const menu = document.getElementById('menu-sm');
+        const buttonMenuOpen = document.getElementById('buttonMenuOpen');
+        const buttonMenuClose = document.getElementById('buttonMenuClose');
+        if (menu.classList.contains('h-0')) {
+            menu.classList.remove('h-0');
+            menu.style.height = 'auto';
+            buttonMenuOpen.classList.add('hidden');
+            buttonMenuClose.classList.remove('hidden');
+        } else {
+            menu.classList.add('h-0');
+            menu.style.height = '0px';
+            buttonMenuOpen.classList.remove('hidden');
+            buttonMenuClose.classList.add('hidden');
+        }
+    }
 </script>
 
 </html>
