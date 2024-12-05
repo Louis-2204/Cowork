@@ -19,10 +19,21 @@ public class User {
         this.secteur_activte = secteur_activte;
     }
 
+    public User (String nom, String prenom, String email, String password, String entreprise, String secteur_activte) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.password = password;
+        this.entreprise = entreprise;
+        this.secteur_activte = secteur_activte;
+    }
+
     public User(String email, String password) {
         this.email = email;
         this.password = password;
     }
+
+
 
 
     public int getId_user() {return id_user;}
