@@ -9,6 +9,7 @@ import java.io.IOException;
  * Servlet implementation class PageController
  */
 @WebServlet({"/accueil", "/nos-espaces", "/forum", "/FAQ", "/mes-reservations", "/salle", "/nos-forfaits", "/forfait"})
+@WebServlet({"/accueil", "/nos-espaces", "/forum", "/FAQ", "/mes-reservations", "/login", "/inscription","/annuaire-client"})
 public class PageController extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
@@ -68,6 +69,20 @@ public class PageController extends HttpServlet {
                 }
                 break;
             default:
+            case "/login":
+                page = "/login.jsp";
+                Title = "Login";
+                break;
+            case "/inscription":
+                page = "/inscription.jsp";
+                Title = "Inscription";
+                break;
+            case "/annuaire-client":
+                page = "/annuaire-client.jsp";
+                Title = "Annuaire Client";
+                break;
+
+                default:
                 page = "/404.jsp"; // Page par défaut ou erreur
                 Title = "Erreur 404";
         }
