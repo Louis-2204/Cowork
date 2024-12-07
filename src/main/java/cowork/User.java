@@ -28,9 +28,9 @@ public class User {
         this.secteur_activte = secteur_activte;
     }
 
-    public User(String email, String password) {
+    public User(String email, int id_user) {
         this.email = email;
-        this.password = password;
+        this.id_user = id_user;
     }
 
 

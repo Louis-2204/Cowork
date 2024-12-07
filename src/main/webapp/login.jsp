@@ -25,8 +25,13 @@
                     // Créer une instance de User
                     loggedInUser = new User(
                             resultSet.getString("email"),
-                            resultSet.getString("password")
+                            resultSet.getInt("id_user")
                     );
+
+                    // Afficher les informations de l'utilisateur dans la console
+                    System.out.println("Utilisateur connecté : ");
+                    System.out.println("Email : " + loggedInUser.getEmail());
+                    System.out.println("ID : " + loggedInUser.getId_user());
 
                     // Stocker l'utilisateur dans la session
                     request.getSession().setAttribute("loggedInUser", loggedInUser);
@@ -40,7 +45,7 @@
             }
         } catch (Exception e) {
             e.printStackTrace();
-            errorMessage = "Erreur lors de la connexion : " + e.getMessage();
+            errorMessage = "Une erreur est survenue lors de la connexion. Veuillez réessayer.";
         }
     }
 
@@ -56,18 +61,14 @@
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
             <form class="space-y-6" action="login.jsp" method="POST">
                 <div>
-                    <div class="mt-2">
-                        <input type="email" name="email" id="email" autocomplete="email" required
-                               class="block w-full rounded-md bg-gray-200 px-3 py-1.5 text-base text-gray-500 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                               placeholder="Email">
-                    </div>
+                    <input type="email" name="email" id="email" autocomplete="email" required
+                           class="block w-full rounded-md bg-gray-200 px-3 py-1.5 text-base text-gray-500 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                           placeholder="Email">
                 </div>
                 <div>
-                    <div class="mt-2">
-                        <input type="password" name="password" id="password" autocomplete="password" required
-                               class="block w-full rounded-md bg-gray-200 px-3 py-1.5 text-base text-gray-500 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                               placeholder="Mot de passe">
-                    </div>
+                    <input type="password" name="password" id="password" autocomplete="password" required
+                           class="block w-full rounded-md bg-gray-200 px-3 py-1.5 text-base text-gray-500 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                           placeholder="Mot de passe">
                 </div>
 
                 <div class="flex justify-center">
@@ -76,16 +77,16 @@
                     </button>
                 </div>
 
-                <% if (request.getAttribute("errorMessage") != null) { %>
+                <% if (errorMessage != null) { %>
                 <div class="text-red-600 text-center mt-4">
-                    Verifiez vos identifiants
+                    <%= errorMessage %>
                 </div>
                 <% } %>
             </form>
 
             <p class="mt-10 text-center text-sm/6 text-gray-500">
                 Nouveau ?
-                <a href="${pageContext.request.contextPath}/inscription"
+                <a href="<%= request.getContextPath() %>/inscription"
                    class="font-semibold text-indigo-600 hover:text-indigo-500">
                     Inscrit toi dès maintenant !</a>
             </p>
