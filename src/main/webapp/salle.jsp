@@ -7,6 +7,7 @@
 <%@ page import="cowork.Equipement" %>
 <%@ page import="cowork.Forfait" %>
 <%@ page import="com.google.gson.Gson" %>
+<%@ page import="cowork.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
@@ -30,8 +31,13 @@
     ResultSet resultEquipements = null;
     ResultSet resultForfaits = null;
 
-    // TODO : Récupérer le vrai id de l'user connecté
-    int id_user_logged = 1;
+    int id_user_logged = 0;
+
+    User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
+    if(loggedInUser != null){
+        id_user_logged = loggedInUser.getId_user();
+    }
+    System.out.println(loggedInUser);
 
     try {
         // Requête SQL pour récupérer les salles
@@ -139,10 +145,14 @@
     <% } %>
     <div class="w-full max-w-[1300px] flex flex-col-reverse gap-4 sm:gap-0 sm:flex-row justify-center">
         <div class="w-full sm:w-7/12 flex flex-col gap-4">
-            <h1 class="text-2xl font-semibold"><%= selectedSalle.getLabel()%></h1>
-            <p class="text-black/70"><%= selectedSalle.getType_espace()%></p>
-            <p>Voir les disponibilités :</p>
-            <% if (!forfaits.isEmpty()) { %>
+<h1 class="text-2xl font-semibold"><%= selectedSalle.getLabel() %></h1>
+<p class="text-black/70"><%= selectedSalle.getType_espace() %></p>
+<p>Voir les disponibilités :</p>
+
+<%
+    if (loggedInUser != null) {
+        if (!forfaits.isEmpty()) {
+%>
             <form class="w-full flex flex-col gap-2" action="${pageContext.request.contextPath}/SubmitReservation" method="post">
                 <label>Forfait :</label>
                 <select name="forfaitId" id="selectForfaitId" class="bg-[#F0F0F0] border-[1px] border-[#CACACA] w-full h-[40px]">
@@ -157,17 +167,26 @@
                     <label>Heures :</label>
                     <div class="time-list"></div> <!-- Les heures sont générées ici -->
                 </div>
-                    <input type='datetime-local' id="timestampDeb" name='timestampDeb' class="hidden ps-2 bg-[#F0F0F0] border-[1px] border-[#CACACA] w-full h-[40px]">
-                    <input type='datetime-local' id="timestampFin" name='timestampFin' class="hidden ps-2 bg-[#F0F0F0] border-[1px] border-[#CACACA] w-full h-[40px]">
-                    <input type='text' class="hidden" id="salleId" name='salleId' value="<%= selectedSalle.getId_salle() %>" >
-                    <input type='text' class="hidden" id="userId" name='userId' value="<%= id_user_logged %>" >
+                <input type='datetime-local' id="timestampDeb" name='timestampDeb' class="hidden ps-2 bg-[#F0F0F0] border-[1px] border-[#CACACA] w-full h-[40px]">
+                <input type='datetime-local' id="timestampFin" name='timestampFin' class="hidden ps-2 bg-[#F0F0F0] border-[1px] border-[#CACACA] w-full h-[40px]">
+                <input type='text' class="hidden" id="salleId" name='salleId' value="<%= selectedSalle.getId_salle() %>">
+                <input type='text' class="hidden" id="userId" name='userId' value="<%= id_user_logged %>">
                 <button disabled name='salle-reserver' type="submit" class='bg-cow_secondary disabled:bg-cow_secondary/50 w-full rounded-sm text-white px-4 py-2 font-semibold '>
                     Réserver
                 </button>
             </form>
-            <% } else { %>
+<%
+        } else {
+%>
             <p class="text-red-500 font-medium">Vous n'avez souscrit à aucun forfait vous permettant de réserver cette salle.</p>
-            <% } %>
+<%
+        }
+    } else {
+%>
+    <p class="text-red-500 font-medium">Vous devez être connecté pour réserver un espace.</p>
+<%
+    }
+%>
             <h3 class="font-semibold">Description</h3>
             <p><%= selectedSalle.getDescription().replace("\n", "<br>")%></p>
             <h3 class="font-semibold">Équipements</h3>
