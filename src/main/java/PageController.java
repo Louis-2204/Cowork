@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Servlet implementation class PageController
  */
-@WebServlet({"/accueil", "/nos-espaces", "/forum", "/FAQ", "/mes-reservations", "/salle", "/nos-forfaits", "/forfait", "/login", "/inscription", "/annuaire-client", "/admin/gestion-espaces"})
+@WebServlet({"/accueil", "/nos-espaces", "/forum", "/FAQ", "/mes-reservations", "/salle", "/nos-forfaits", "/forfait", "/login", "/inscription", "/annuaire-client", "/admin/gestion-espaces", "/admin/gestion-forfaits"})
 public class PageController extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
@@ -71,6 +71,10 @@ public class PageController extends HttpServlet {
             case "/admin/gestion-espaces":
                 page = "/admin/gestion-espaces.jsp";
                 Title = "Gestion Espaces";
+                break;
+            case "/admin/gestion-forfaits":
+                page = "/admin/gestion-forfaits.jsp";
+                Title = "Gestion Forfaits";
                 break;
             case "/login":
                 page = "/login.jsp";

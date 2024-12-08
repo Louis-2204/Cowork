@@ -11,16 +11,14 @@ public class Reservation {
     private Timestamp timestamp_deb;
     private Timestamp timestamp_fin;
     private String code;
-    private ArrayList<Equipement> equipements;
     private Salle salle;
 
-    public Reservation(String id_user, String id_salle, Timestamp timestamp_deb, Timestamp timestamp_fin, String code, ArrayList<Equipement> equipements, Salle salle) {
+    public Reservation(String id_user, String id_salle, Timestamp timestamp_deb, Timestamp timestamp_fin, String code, Salle salle) {
         this.id_user = id_user;
         this.id_salle = id_salle;
         this.timestamp_deb = timestamp_deb;
         this.timestamp_fin = timestamp_fin;
         this.code = code;
-        this.equipements = equipements;
         this.salle = salle;
     }
 
@@ -42,10 +40,6 @@ public class Reservation {
 
     public String getCode() {
         return code;
-    }
-
-    public ArrayList<Equipement> getEquipements() {
-        return equipements;
     }
 
     public Salle getSalle() {

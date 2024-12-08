@@ -8,19 +8,16 @@
             </svg>
         </button>
     </div>
-    <form action="" method="post" class="flex flex-col gap-2">
+    <form action="/cowork/admin/insertEspace" method="post" class="flex flex-col gap-2">
         <label for="type">Type</label>
         <select name="type" id="type" class="border rounded-md p-1">
-            <option value="open_space">Open space</option>
-            <option value="bureau">Bureau</option>
-            <option value="salle_reunion">Salle de réunion</option>
+            <option value="co-working">Co-working</option>
+            <option value="bureau-privé">Bureau privé</option>
         </select>
         <label for="image">Image</label>
         <input type="text" name="image" id="image" class="border rounded-md p-1">
         <label for="nom">Nom</label>
         <input type="text" name="nom" id="nom" class="border rounded-md p-1">
-        <label for="prix">Prix</label>
-        <input type="number" name="prix" id="prix" class="border rounded-md p-1">
         <label for="capacite">Capacité</label>
         <input type="number" name="capacite" id="capacite" class="border rounded-md p-1">
         <label for="equipements">Équipements</label>

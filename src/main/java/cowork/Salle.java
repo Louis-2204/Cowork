@@ -1,5 +1,7 @@
 package cowork;
 
+import java.util.ArrayList;
+
 public class Salle {
     private int id_salle;
     private String label;
@@ -8,6 +10,26 @@ public class Salle {
     private int capacite;
     private String image_url;
     private Equipement[] equipements;
+    private ArrayList<Equipement> equipementsArrayList;
+
+    public Salle(int id_salle, String label, String type_espace, int capacite, String image_url, ArrayList<Equipement> equipementsArrayList) {
+        this.id_salle = id_salle;
+        this.label = label;
+        this.type_espace = type_espace;
+        this.capacite = capacite;
+        this.image_url = image_url;
+        this.equipementsArrayList = equipementsArrayList;
+    }
+
+    public Salle(int id_salle, String label, String description, String type_espace, int capacite, String image_url, ArrayList<Equipement> equipementsArrayList) {
+        this.id_salle = id_salle;
+        this.label = label;
+        this.description = description;
+        this.type_espace = type_espace;
+        this.capacite = capacite;
+        this.image_url = image_url;
+        this.equipementsArrayList = equipementsArrayList;
+    }
 
     public Salle(int id_salle, String label, String type_espace, int capacite, String image_url, Equipement[] equipements) {
         this.id_salle = id_salle;
@@ -83,5 +105,13 @@ public class Salle {
 
     public void setEquipements(Equipement[] equipements) {
         this.equipements = equipements;
+    }
+
+    public ArrayList<Equipement> getEquipementsArrayList() {
+        return equipementsArrayList;
+    }
+
+    public void setEquipementsArrayList(ArrayList<Equipement> equipementsArrayList) {
+        this.equipementsArrayList = equipementsArrayList;
     }
 }

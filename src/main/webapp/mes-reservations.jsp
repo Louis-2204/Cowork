@@ -1,99 +1,96 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.sql.*, db.DatabaseConnection" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="cowork.Reservation" %>
 <%@ page import="cowork.Salle" %>
 <%@ page import="cowork.Equipement" %>
 
-<%@ page import="java.util.logging.Logger "%>
-<%@ page import="java.util.Arrays" %>
-<%! static Logger logger = Logger.getLogger("cowork"); %>
-
+<%@ page import="java.util.logging.Logger " %>
+<%@ page import="cowork.User" %>
 <%
+    User user = (User) request.getSession().getAttribute("loggedInUser");
+
+    if (user == null) {
+        response.sendRedirect(request.getContextPath() + "/connexion");
+        return;
+    }
+
     Connection connection = null;
     Statement statement = null;
     ResultSet resultSetAVenir = null;
     ResultSet resultSetPasse = null;
 
-    // Récupérer la connexion via le singleton
-    connection = DatabaseConnection.getInstance();
-
-//    private String id_user;
-//    private String id_salle;
-//    private Timestamp timestamp_deb;
-//    private Timestamp timestamp_fin;
-//    private String code;
-//    private ArrayList<Equipement> equipements;
-//    private Salle salle;
-
-    // Initialisation de la requête SQL pour récupérer les réservations à venir
-    String queryReservationsAvenir = "SELECT\n" +
-            "    us.id_user,\n" +
-            "    us.id_salle,\n" +
-            "    us.timestamp_deb,\n" +
-            "    us.timestamp_fin,\n" +
-            "    us.code,\n" +
-            "    s.label AS salle_label,\n" +
-            "    s.type_espace,\n" +
-            "    s.capacite,\n" +
-            "    s.image_url,\n" +
-            "    s.description,\n" +
-            "    STRING_AGG(e.label, ', ') AS equipements\n" +
-            "FROM users_salles us\n" +
-            "         JOIN salles s ON us.id_salle = s.id_salle\n" +
-            "         LEFT JOIN salles_equipements se ON s.id_salle = se.id_salle\n" +
-            "         LEFT JOIN equipements e ON se.id_equipement = e.id_equipement\n" +
-            "WHERE us.id_user = 1\n" +
-            "AND us.timestamp_fin > (Select now())\n" +
-            "GROUP BY\n" +
-            "    us.id_user,\n" +
-            "    us.id_salle,\n" +
-            "    us.timestamp_deb,\n" +
-            "    us.timestamp_fin,\n" +
-            "    us.code,\n" +
-            "    s.label,\n" +
-            "    s.type_espace,\n" +
-            "    s.capacite,\n" +
-            "    s.image_url,\n" +
-            "    s.description;";
-
-    // Initialisation de la requête SQL pour récupérer les réservations à venir
-    String queryReservationsPasse = "SELECT\n" +
-            "    us.id_user,\n" +
-            "    us.id_salle,\n" +
-            "    us.timestamp_deb,\n" +
-            "    us.timestamp_fin,\n" +
-            "    us.code,\n" +
-            "    s.label AS salle_label,\n" +
-            "    s.type_espace,\n" +
-            "    s.capacite,\n" +
-            "    s.image_url,\n" +
-            "    s.description,\n" +
-            "    STRING_AGG(e.label, ', ') AS equipements\n" +
-            "FROM users_salles us\n" +
-            "         JOIN salles s ON us.id_salle = s.id_salle\n" +
-            "         LEFT JOIN salles_equipements se ON s.id_salle = se.id_salle\n" +
-            "         LEFT JOIN equipements e ON se.id_equipement = e.id_equipement\n" +
-            "WHERE us.id_user = 1\n" +
-            "AND us.timestamp_fin <= (Select now())\n" +
-            "GROUP BY\n" +
-            "    us.id_user,\n" +
-            "    us.id_salle,\n" +
-            "    us.timestamp_deb,\n" +
-            "    us.timestamp_fin,\n" +
-            "    us.code,\n" +
-            "    s.label,\n" +
-            "    s.type_espace,\n" +
-            "    s.capacite,\n" +
-            "    s.image_url,\n" +
-            "    s.description;";
-
-
-    // Exécuter les requêtes
     ArrayList<Reservation> reservationsAvenir;
     ArrayList<Reservation> reservationsPasse;
-
     try {
+        // Récupérer la connexion via le singleton
+        connection = DatabaseConnection.getInstance();
+
+        // Initialisation de la requête SQL pour récupérer les réservations à venir
+        String queryReservationsAvenir = "SELECT\n" +
+                "    us.id_user,\n" +
+                "    us.id_salle,\n" +
+                "    us.timestamp_deb,\n" +
+                "    us.timestamp_fin,\n" +
+                "    us.code,\n" +
+                "    s.label AS salle_label,\n" +
+                "    s.type_espace,\n" +
+                "    s.capacite,\n" +
+                "    s.image_url,\n" +
+                "    s.description,\n" +
+                "    STRING_AGG(e.label, ', ') AS equipements\n" +
+                "FROM users_salles us\n" +
+                "         JOIN salles s ON us.id_salle = s.id_salle\n" +
+                "         LEFT JOIN salles_equipements se ON s.id_salle = se.id_salle\n" +
+                "         LEFT JOIN equipements e ON se.id_equipement = e.id_equipement\n" +
+                "WHERE us.id_user =" + user.getId_user() + "\n" +
+                "AND us.timestamp_fin > (Select now())\n" +
+                "GROUP BY\n" +
+                "    us.id_user,\n" +
+                "    us.id_salle,\n" +
+                "    us.timestamp_deb,\n" +
+                "    us.timestamp_fin,\n" +
+                "    us.code,\n" +
+                "    s.label,\n" +
+                "    s.type_espace,\n" +
+                "    s.capacite,\n" +
+                "    s.image_url,\n" +
+                "    s.description;";
+
+        // Initialisation de la requête SQL pour récupérer les réservations à venir
+        String queryReservationsPasse = "SELECT\n" +
+                "    us.id_user,\n" +
+                "    us.id_salle,\n" +
+                "    us.timestamp_deb,\n" +
+                "    us.timestamp_fin,\n" +
+                "    us.code,\n" +
+                "    s.label AS salle_label,\n" +
+                "    s.type_espace,\n" +
+                "    s.capacite,\n" +
+                "    s.image_url,\n" +
+                "    s.description,\n" +
+                "    STRING_AGG(e.label, ', ') AS equipements\n" +
+                "FROM users_salles us\n" +
+                "         JOIN salles s ON us.id_salle = s.id_salle\n" +
+                "         LEFT JOIN salles_equipements se ON s.id_salle = se.id_salle\n" +
+                "         LEFT JOIN equipements e ON se.id_equipement = e.id_equipement\n" +
+                "WHERE us.id_user =" + user.getId_user() + "\n" +
+                "AND us.timestamp_fin <= (Select now())\n" +
+                "GROUP BY\n" +
+                "    us.id_user,\n" +
+                "    us.id_salle,\n" +
+                "    us.timestamp_deb,\n" +
+                "    us.timestamp_fin,\n" +
+                "    us.code,\n" +
+                "    s.label,\n" +
+                "    s.type_espace,\n" +
+                "    s.capacite,\n" +
+                "    s.image_url,\n" +
+                "    s.description;";
+
+
+        // Exécuter les requêtes
+
         resultSetAVenir = connection.createStatement().executeQuery(queryReservationsAvenir);
         resultSetPasse = connection.createStatement().executeQuery(queryReservationsPasse);
 
@@ -125,18 +122,17 @@
                     resultSetAVenir.getTimestamp("timestamp_deb"),
                     resultSetAVenir.getTimestamp("timestamp_fin"),
                     resultSetAVenir.getString("code"),
-                    equipementsList,  // Utilisation de la liste d'équipements, vide si aucun équipement
                     new Salle(
                             resultSetAVenir.getInt("id_salle"),
                             resultSetAVenir.getString("salle_label"),
                             resultSetAVenir.getString("type_espace"),
                             resultSetAVenir.getInt("capacite"),
-                            resultSetAVenir.getString("image_url")
+                            resultSetAVenir.getString("image_url"),
+                            equipementsList
                     )
             );
             reservationsAvenir.add(reservation);
         }
-
 
 
         // Parcourir les résultats et remplir la liste des reservationsPasse
@@ -163,13 +159,13 @@
                     resultSetPasse.getTimestamp("timestamp_deb"),
                     resultSetPasse.getTimestamp("timestamp_fin"),
                     resultSetPasse.getString("code"),
-                    equipementsList,  // Utilisation de la liste d'équipements, vide si aucun équipement
                     new Salle(
                             resultSetPasse.getInt("id_salle"),
                             resultSetPasse.getString("salle_label"),
                             resultSetPasse.getString("type_espace"),
                             resultSetPasse.getInt("capacite"),
-                            resultSetPasse.getString("image_url")
+                            resultSetPasse.getString("image_url"),
+                            equipementsList
                     )
             );
             reservationsPasse.add(reservation);
@@ -188,7 +184,7 @@
             <div class="w-full h-full flex flex-col overflow-y-auto py-2 gap-2">
                 <%-- Si aucune réservation à venir, afficher un message --%>
                 <% if (reservationsAvenir.isEmpty()) { %>
-                    <div class="text-center text-gray-500">Aucune réservation à venir</div>
+                <div class="text-center text-gray-500">Aucune réservation à venir</div>
                 <% } %>
                 <%-- Inclure dynamiquement les composants de post --%>
                 <% for (Object reservation : reservationsAvenir) { %>
@@ -197,7 +193,7 @@
                     request.setAttribute("reservation", reservation);
                 %>
                 <jsp:include page="/components/mesReservations/espace.jsp">
-                    <jsp:param name="typeResa" value="avenir" />
+                    <jsp:param name="typeResa" value="avenir"/>
                 </jsp:include>
                 <% } %>
             </div>
@@ -213,11 +209,12 @@
                 <% } %>
                 <%-- Inclure dynamiquement les composants de post --%>
                 <% for (Object reservation : reservationsPasse) { %><%
-                    // Ajout de l'objet "reservation" comme attribut de la requête
-                    request.setAttribute("reservation", reservation);%>
-                    <jsp:include page="/components/mesReservations/espace.jsp">
-                    <jsp:param name="typeResa" value="passe" />
-                </jsp:include><% } %>
+                // Ajout de l'objet "reservation" comme attribut de la requête
+                request.setAttribute("reservation", reservation);%>
+                <jsp:include page="/components/mesReservations/espace.jsp">
+                    <jsp:param name="typeResa" value="passe"/>
+                </jsp:include>
+                <% } %>
             </div>
         </div>
     </div>
