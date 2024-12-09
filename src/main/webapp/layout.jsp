@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="cowork.User" %>
+<%
+    User user = (User) request.getSession().getAttribute("loggedInUser");
+%>
 <!DOCTYPE html>
 <html lang="en" class='w-full h-full'>
 <head>
@@ -44,58 +48,65 @@
                 <ul class='list-none flex flex-col md:flex-row gap-6 items-center justify-end text-base'>
                     <li class="hover:bg-gray-200 rounded-md">
                         <a class="w-full p-2 flex justify-center items-center"
-                           href="${pageContext.request.contextPath}/accueil">Accueil</a>
-                    </li>
-                    <li class="hover:bg-gray-200 rounded-md">
-                        <a class="w-full p-2 flex justify-center items-center" href="nos-espaces?type=%25&dateDeb=&dateFin=">Espaces</a>
-                    </li>
-                    <li class="hover:bg-gray-200 rounded-md">
-                        <a class="w-full p-2 flex justify-center items-center" href="nos-forfaits">Forfaits</a>
+                           href="/cowork/accueil">Accueil</a>
                     </li>
                     <li class="hover:bg-gray-200 rounded-md">
                         <a class="w-full p-2 flex justify-center items-center"
-                           href="${pageContext.request.contextPath}/forum">Forum</a>
+                           href="/cowork/nos-espaces?type=%25&dateDeb=&dateFin=">Espaces</a>
+                    </li>
+                    <li class="hover:bg-gray-200 rounded-md">
+                        <a class="w-full p-2 flex justify-center items-center" href="/cowork/nos-forfaits">Forfaits</a>
                     </li>
                     <li class="hover:bg-gray-200 rounded-md">
                         <a class="w-full p-2 flex justify-center items-center"
-                           href="${pageContext.request.contextPath}/FAQ">FAQ</a>
+                           href="/cowork/forum">Forum</a>
+                    </li>
+                    <li class="hover:bg-gray-200 rounded-md">
+                        <a class="w-full p-2 flex justify-center items-center"
+                           href="/cowork/FAQ">FAQ</a>
                     </li>
                 </ul>
             </div>
             <div class="w-full md:w-fit flex justify-end items-center">
-                <c:if test="${sessionScope.loggedInUser == null}">
-                    <a class='bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold text-center'
-                       href="${pageContext.request.contextPath}/login">
-                        Connexion
-                    </a>
-                </c:if>
+                <% if (user == null) { %>
+                <a class='bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold text-center'
+                   href="/cowork/login">
+                    Connexion
+                </a>
+                <% } else { %>
+                Connecté
+                <% } %>
             </div>
         </div>
     </nav>
 
-	<div id="menu-sm" class="w-full flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 h-0 overflow-hidden">
-		<div class="w-full md:w-6/12 ">
-			<ul class='list-none flex flex-col md:flex-row gap-2 items-center justify-center text-base'>
-				<li class="w-full hover:bg-gray-200 rounded-sm">
-					<a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/accueil">Accueil</a>
-				</li>
-				<li class="w-full hover:bg-gray-200 rounded-sm">
-					<a class="w-full p-2 flex justify-center items-center" href="nos-espaces">Espaces</a>
-				</li>
-				<li class="w-full hover:bg-gray-200 rounded-sm">
-					<a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/forum">Forum</a>
-				</li>
-				<li class="w-full hover:bg-gray-200 rounded-sm">
-					<a class="w-full p-2 flex justify-center items-center" href="${pageContext.request.contextPath}/FAQ">FAQ</a>
-				</li>
-			</ul>
-		</div>
-		<div class="w-full md:w-3/12 flex justify-end items-center">
-			<button class='bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold '>Se
-				connecter
-			</button>
-		</div>
-	</div>
+    <div id="menu-sm"
+         class="w-full flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 h-0 overflow-hidden">
+        <div class="w-full md:w-6/12 ">
+            <ul class='list-none flex flex-col md:flex-row gap-2 items-center justify-center text-base'>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a class="w-full p-2 flex justify-center items-center"
+                       href="${pageContext.request.contextPath}/accueil">Accueil</a>
+                </li>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a class="w-full p-2 flex justify-center items-center" href="nos-espaces">Espaces</a>
+                </li>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a class="w-full p-2 flex justify-center items-center"
+                       href="${pageContext.request.contextPath}/forum">Forum</a>
+                </li>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a class="w-full p-2 flex justify-center items-center"
+                       href="${pageContext.request.contextPath}/FAQ">FAQ</a>
+                </li>
+            </ul>
+        </div>
+        <div class="w-full md:w-3/12 flex justify-end items-center">
+            <button class='bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold '>Se
+                connecter
+            </button>
+        </div>
+    </div>
 </header>
 
 <main class='w-full flex flex-col items-center'>

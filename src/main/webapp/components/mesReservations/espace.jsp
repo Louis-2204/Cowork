@@ -25,8 +25,8 @@
             </div>
         </div>
         <div class="flex flex-wrap gap-2">
-            <% for (Equipement equipement : reservation.getEquipements()) { %>
-                <span class="text-sm bg-gray-300 rounded-full px-2"><%= equipement.getLabel() %></span>
+            <% for (Equipement equipement : reservation.getSalle().getEquipementsArrayList()) { %>
+            <span class="text-sm bg-gray-300 rounded-full px-2"><%= equipement.getLabel() %></span>
             <% } %>
         </div>
         <div class="flex w-full justify-end">
@@ -35,6 +35,11 @@
                     class="border border-[#FF6641] hover:bg-[#FF6641] hover:text-white rounded-sm py-1 px-3 transition-all duration-150">
                 Afficher le code
             </button>
+            <% } else { %>
+            <a href="<%= request.getContextPath() %>/salle?id=<%= reservation.getSalle().getId_salle() %>"
+               class="border border-[#FF6641] hover:bg-[#FF6641] hover:text-white rounded-sm py-1 px-3 transition-all duration-150">
+                Réserver à nouveau
+            </a>
             <% } %>
         </div>
     </div>

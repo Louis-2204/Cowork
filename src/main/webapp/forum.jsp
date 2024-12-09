@@ -142,6 +142,16 @@
 <div class='w-full min-h-[calc(100vh-256px)] flex flex-col items-center max-w-[1300px]'>
     <div class='w-full h-full p-6 md:p-10'>
         <h1 class='text-3xl font-medium'>Le forum Cowork</h1>
+        <div class="w-full flex gap-1 py-4">
+            <form action="${pageContext.request.contextPath}/Post" method="POST" class="w-full flex gap-1">
+                <input type="hidden" name="id_parent" value="">
+                <input type="text" name="content" class="w-full border rounded-sm p-1" placeholder="Écrire un post...">
+                <button type="submit"
+                        class="border border-orange-400 hover:bg-orange-400 hover:text-white rounded-sm py-1 px-3 transition-all duration-150">
+                    Envoyer
+                </button>
+            </form>
+        </div>
         <div class="w-full h-full flex flex-col overflow-y-auto py-2 gap-2">
             <%-- Inclure dynamiquement les composants de post --%>
             <% for (Post post : posts) { %>
