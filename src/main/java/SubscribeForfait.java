@@ -18,8 +18,7 @@ public class SubscribeForfait extends HttpServlet {
         // Récupérer les paramètres du formulaire
         String idForfait = request.getParameter("idForfait");
         String action = request.getParameter("action");
-        // TODO: récupérer l'id de l'utilisateur connecté
-        int idUserLogged = 1;
+        int idUserLogged = Integer.parseInt(request.getParameter("userId"));
         String message = "";
 
         try{

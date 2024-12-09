@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, db.DatabaseConnection" %>
 <%@ page import="cowork.User" %>
+
 <%
   // Message d'erreur ou de succès
   String message = null;
@@ -37,6 +38,7 @@
         if (rowsAffected > 0) {
           message = "Inscription réussie. Vous pouvez vous connecter.";
         } else {
+          response.sendRedirect(request.getContextPath() + "/inscrption");
           message = "Erreur lors de l'inscription. Veuillez réessayer.";
         }
       } catch (SQLException e) {
@@ -44,6 +46,7 @@
         if (e.getMessage().contains("Duplicate entry")) {
           message = "Cet email est déjà utilisé.";
         } else {
+          response.sendRedirect(request.getContextPath() + "/inscription");
           message = "Erreur lors de la connexion à la base de données.";
         }
       }
@@ -126,12 +129,12 @@
     nom: {
       element: document.getElementById('nom'),
       error: document.getElementById('nomError'),
-      validator: (value) => value.trim().length >= 4 || "Le nom doit contenir au moins 4 caracteres."
+      validator: (value) => value.trim().length >= 1 || "Le nom doit contenir au moins 2 caracteres."
     },
     prenom: {
       element: document.getElementById('prenom'),
       error: document.getElementById('prenomError'),
-      validator: (value) => value.trim().length >= 4 || "Le prenom doit contenir au moins 4 caracteres."
+      validator: (value) => value.trim().length >= 1 || "Le prenom doit contenir au moins 4 caracteres."
     },
     email: {
       element: document.getElementById('email'),

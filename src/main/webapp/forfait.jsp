@@ -6,6 +6,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="cowork.Equipement" %>
 <%@ page import="cowork.Forfait" %>
+<%@ page import="cowork.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%
@@ -58,21 +59,24 @@
         // Passer les données à la JSP
         request.setAttribute("selectedForfait", forfait);
 
-        // Récupérer les id de forfaits souscrits par l'utilisateur
-        String queryIdsForfaits = "Select distinct id_forfait from users_forfaits where id_user = ?";
-        preparedStatement = connection.prepareStatement(queryIdsForfaits);
-        // TODO : remplacer par l'id user connecté
-        preparedStatement.setInt(1, 1);
-        resultIdsForfaits = preparedStatement.executeQuery();
-
         // Créer la liste des forfaits souscrits
         ArrayList<String> idsForfaits = new ArrayList<>();
-        while (resultIdsForfaits.next()) {
-            int id_forfait = resultIdsForfaits.getInt("id_forfait");
-            idsForfaits.add(Integer.toString(id_forfait));
+
+        User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
+        if(loggedInUser != null){
+            // Récupérer les id de forfaits souscrits par l'utilisateur
+            String queryIdsForfaits = "Select distinct id_forfait from users_forfaits where id_user = ?";
+            preparedStatement = connection.prepareStatement(queryIdsForfaits);
+            preparedStatement.setInt(1, loggedInUser.getId_user());
+            resultIdsForfaits = preparedStatement.executeQuery();
+
+            while (resultIdsForfaits.next()) {
+                int id_forfait = resultIdsForfaits.getInt("id_forfait");
+                idsForfaits.add(Integer.toString(id_forfait));
+            }
         }
         request.setAttribute("idsForfaits", idsForfaits);
-
+        request.setAttribute("loggedInUser", loggedInUser);
 
     } catch (Exception e) {
         e.printStackTrace();
@@ -91,7 +95,7 @@
     }
 
     ArrayList<String> idsForfaits = (ArrayList<String>) request.getAttribute("idsForfaits");
-    System.out.println(idsForfaits);
+    User loggedInUser = (User) request.getAttribute("loggedInUser");
 %>
 
 
@@ -112,13 +116,24 @@
             <h1 class="text-2xl font-semibold"><%= selectedForfait.getLabel()%></h1>
             <p class="text-black/70"><%= selectedForfait.getType_espace()%></p>
             <h1 class="text-2xl font-semibold text-cow_secondary "><%= selectedForfait.getPrix()%>€</h1>
-            <form class="w-full flex flex-col gap-2" action="${pageContext.request.contextPath}/SubscribeForfait" method="post">
-                <input type="hidden" name="idForfait" value="<%= selectedForfait.getId_forfait()%>">
-                <input type="hidden" name="action" value="<%= idsForfaits.contains(request.getAttribute("forfaitId")) ? "unsubscribe" : "subscribe" %>">
-                <button name='forfait-souscrire' type="submit" class='bg-cow_secondary w-full rounded-sm text-white px-4 py-2 font-semibold '>
-                    <%= idsForfaits.contains(request.getAttribute("forfaitId")) ? "Se désabonner" : "Souscrire" %>
-                </button>
-            </form>
+            <%
+                if (loggedInUser != null) {
+            %>
+                    <form class="w-full flex flex-col gap-2" action="${pageContext.request.contextPath}/SubscribeForfait" method="post">
+                        <input type="hidden" name="idForfait" value="<%= selectedForfait.getId_forfait() %>">
+                        <input type="hidden" name="userId" value="<%= loggedInUser.getId_user() %>">
+                        <input type="hidden" name="action" value="<%= idsForfaits.contains(request.getAttribute("forfaitId")) ? "unsubscribe" : "subscribe" %>">
+                        <button name='forfait-souscrire' type="submit" class='bg-cow_secondary w-full rounded-sm text-white px-4 py-2 font-semibold '>
+                            <%= idsForfaits.contains(request.getAttribute("forfaitId")) ? "Se désabonner" : "Souscrire" %>
+                        </button>
+                    </form>
+            <%
+                } else {
+            %>
+                    <p class="text-red-500 font-medium">Vous devez être connecté pour souscrire à un forfait.</p>
+            <%
+                }
+            %>
             <h3 class="font-semibold">Description</h3>
             <p><%= selectedForfait.getDescription().replace("\n", "<br>")%></p>
         </div>
