@@ -39,11 +39,13 @@
                     response.sendRedirect(request.getContextPath() + "/accueil");
                     return; // Arrêter l'exécution après la redirection
                 } else {
+                    response.sendRedirect(request.getContextPath() + "/login");
                     // Définit le message d'erreur si les identifiants sont incorrects
                     errorMessage = "Identifiant ou mot de passe incorrect.";
                 }
             }
         } catch (Exception e) {
+            response.sendRedirect(request.getContextPath() + "/login");
             e.printStackTrace();
             errorMessage = "Une erreur est survenue lors de la connexion. Veuillez réessayer.";
         }
@@ -82,6 +84,7 @@
                     <%= errorMessage %>
                 </div>
                 <% } %>
+
             </form>
 
             <p class="mt-10 text-center text-sm/6 text-gray-500">

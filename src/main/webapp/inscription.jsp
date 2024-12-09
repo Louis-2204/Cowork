@@ -36,9 +36,11 @@
         // Exécutez la requête
         int rowsAffected = preparedStatement.executeUpdate();
         if (rowsAffected > 0) {
-          message = "Inscription réussie. Vous pouvez vous connecter.";
+          response.setContentType("text/html");
+          out.println("<h1 style='color: green;'>Inscription réussie ! Bienvenue dans notre plateforme.</h1>");
+          response.sendRedirect(request.getContextPath() + "/inscription");
         } else {
-          response.sendRedirect(request.getContextPath() + "/inscrption");
+          response.sendRedirect(request.getContextPath() + "/inscription");
           message = "Erreur lors de l'inscription. Veuillez réessayer.";
         }
       } catch (SQLException e) {

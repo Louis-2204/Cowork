@@ -61,12 +61,12 @@
                 String initiales = (user.getNom().substring(0, 1) + user.getPrenom().substring(0, 1)).toUpperCase();
             %>
             <a href="${pageContext.request.contextPath}/annuaire-client?showModal=true&selectedUserId=<%= user.getId_user() %>" id="liste<%= user.getId_user() %>" class="bg-white p-8 rounded-lg shadow-md w-3/4 h-64 userItem"
-                data-id="<%= user.getId_user() %>"
-                data-prenom="<%= user.getPrenom() %>"
-                data-nom="<%= user.getNom() %>"
-                data-email="<%= user.getEmail() %>"
-                data-entreprise="<%= user.getEntreprise() %>"
-                data-secteur-activite="<%= user.getSecteur_activte() %>">
+               data-id="<%= user.getId_user() %>"
+               data-prenom="<%= user.getPrenom() %>"
+               data-nom="<%= user.getNom() %>"
+               data-email="<%= user.getEmail() %>"
+               data-entreprise="<%= user.getEntreprise() %>"
+               data-secteur-activite="<%= user.getSecteur_activte() %>">
 
                 <div class="flex justify-center items-center mb-4">
                     <div class="w-32 h-32 rounded-full bg-gray-200 text-black flex items-center justify-center font-bold text-4xl">
@@ -90,7 +90,7 @@
 <div id="userModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center">
     <% if (selectedUserId > 0) { %>
     <div class="bg-white flex flex-col gap-2 p-6 rounded-lg shadow-lg w-1/2">
-        <h2 class="text-xl font-bold mb-4" id="modalTitle">Informations de l'utilisateur</h2>
+        <h2 class="text-xl font-bold mb-4 text-center" id="modalTitle">Informations de l'utilisateur</h2>
         <input type="hidden" id="userIdHidden">
         <label class="font-semibold" for="modalPrenom">Prénom :</label>
         <p id="modalPrenom"><%= users.get(selectedUserId - 1).getPrenom() %></p>
@@ -102,7 +102,7 @@
         <p id="modalEntreprise"><%= users.get(selectedUserId - 1).getEntreprise() %></p>
         <label class="font-semibold" for="modalSecteurActivite">Secteur d'activité :</label>
         <p id="modalSecteurActivite"><%= users.get(selectedUserId - 1).getSecteur_activte() %></p>
-        <a href="${pageContext.request.contextPath}/annuaire-client?showModal=false" id="closeModal" class="mt-4 px-4 py-2 bg-red-500 text-white w-fit rounded-lg">Fermer</a>
+        <a href="${pageContext.request.contextPath}/annuaire-client?showModal=false" id="closeModal" class="mt-4 px-4 py-2 bg-red-500 text-white w-fit rounded-lg ml-auto">Fermer</a>
     </div>
     <% } %>
 </div>
