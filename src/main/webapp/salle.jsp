@@ -501,6 +501,8 @@
             setDisableSubmitButton(true);
         } else if (timestampDeb.substring(0, 4) < new Date().getFullYear()) {
             setDisableSubmitButton(true);
+        } else if (timestampDeb === timestampFin) {
+            setDisableSubmitButton(true);
         } else {
             setDisableSubmitButton(false);
         }

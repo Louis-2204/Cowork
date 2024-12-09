@@ -8,6 +8,8 @@ public class User {
     private String password;
     private String entreprise;
     private String secteur_activte;
+    private boolean is_admin;
+
 
     public User (int id_user, String nom, String prenom, String email, String password, String entreprise, String secteur_activte) {
         this.id_user = id_user;
@@ -28,9 +30,10 @@ public class User {
         this.secteur_activte = secteur_activte;
     }
 
-    public User(String email, int id_user) {
+    public User(String email, int id_user, boolean is_admin) {
         this.email = email;
         this.id_user = id_user;
+        this.is_admin = is_admin;
     }
 
 
@@ -57,4 +60,6 @@ public class User {
     public String getSecteur_activte() {return secteur_activte;}
     public void setSecteur_activte (String secteur_activte) {this.secteur_activte = secteur_activte;}
 
+    public boolean getIs_admin() {return is_admin;}
+    public void setIs_admin(boolean is_admin) {this.is_admin = is_admin;}
 }

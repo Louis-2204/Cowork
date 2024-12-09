@@ -9,7 +9,7 @@
     if ("POST".equalsIgnoreCase(request.getMethod())) {
         try (Connection connection = DatabaseConnection.getInstance();
              PreparedStatement preparedStatement = connection.prepareStatement(
-                     "SELECT * FROM users WHERE email = ? AND password = ?")) {
+                     "SELECT email, id_user, is_admin FROM users WHERE email = ? AND password = ?")) {
 
             // Récupérer les paramètres du formulaire de connexion
             String email = request.getParameter("email");
@@ -25,7 +25,8 @@
                     // Créer une instance de User
                     loggedInUser = new User(
                             resultSet.getString("email"),
-                            resultSet.getInt("id_user")
+                            resultSet.getInt("id_user"),
+                            resultSet.getBoolean("is_admin")
                     );
 
                     // Afficher les informations de l'utilisateur dans la console

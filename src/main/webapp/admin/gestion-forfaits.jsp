@@ -7,7 +7,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     User user = (User) session.getAttribute("loggedInUser");
-    if (user == null) {
+    if (user == null || !user.getIs_admin()) {
         return;
     }
 
@@ -60,7 +60,7 @@
         throw new RuntimeException(e);
     }
 %>
-<div class='w-full h-[calc(100vh-256px)] flex flex-col items-center max-w-[1300px]'>
+<div class='w-full min-h-[calc(100vh-256px)] flex flex-col items-center max-w-[1300px]'>
     <div class='w-full h-full p-6 md:p-10'>
         <div class="flex">
             <h1 class='text-3xl font-medium'>Gestion des forfaits</h1>

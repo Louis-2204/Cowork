@@ -43,7 +43,7 @@
                 </svg>
             </button>
         </div>
-        <div class="w-full md:w-9/12 flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 h-0 md:h-auto overflow-hidden">
+        <div class="w-full md:w-9/12 flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 h-0 md:h-auto overflow-hidden md:overflow-visible">
             <div class="w-full md:w-6/12 min-w-fit">
                 <ul class='list-none flex flex-col md:flex-row gap-6 items-center justify-end text-base'>
                     <li class="hover:bg-gray-200 rounded-md">
@@ -67,14 +67,29 @@
                     </li>
                 </ul>
             </div>
-            <div class="w-full md:w-fit flex justify-end items-center">
+            <div class="w-full md:w-fit flex justify-end items-center relative">
                 <% if (user == null) { %>
                 <a class='bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold text-center'
                    href="/cowork/login">
                     Connexion
                 </a>
                 <% } else { %>
-                Connecté
+                <button class="w-8 h-8 rounded-full bg-gray-400" onclick="togglePop()"></button>
+                <div id="popover" class="absolute top-12 right-0 bg-white shadow-lg rounded-md p-4 hidden w-[175px]">
+                    <ul class="mt-2 flex flex-col gap-1">
+                        <% if (user.getIs_admin()) { %>
+                        <li><a href="/cowork/admin/annuaire-client" class="text-purple-500 hover:underline">Annuaire des
+                            clients</a></li>
+                        <li><a href="/cowork/admin/gestion-espaces" class="text-purple-500 hover:underline">Gestion des
+                            espaces</a></li>
+                        <li><a href="/cowork/admin/gestion-forfaits" class="text-purple-500 hover:underline">Gestion des
+                            forfaits</a></li>
+                        <% } %>
+                        <li><a href="/cowork/mes-reservations" class="text-blue-500 hover:underline">Mes
+                            réservations</a></li>
+                        <li><a href="/cowork/logout" class="text-red-500 hover:underline">Déconnexion</a></li>
+                    </ul>
+                </div>
                 <% } %>
             </div>
         </div>
@@ -101,10 +116,40 @@
                 </li>
             </ul>
         </div>
-        <div class="w-full md:w-3/12 flex justify-end items-center">
-            <button class='bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold '>Se
-                connecter
+        <div class="w-full md:w-3/12 flex flex-col justify-end items-center">
+            <% if (user == null) { %>
+            <button class='bg-orange-400 w-full md:w-auto rounded-sm text-white px-4 py-2 font-semibold '>
+                <a href="${pageContext.request.contextPath}/login">
+                    Se connecter
+                </a>
             </button>
+            <% } else { %>
+            <ul class="w-full flex flex-col gap-1">
+                    <% if (user.getIs_admin()) { %>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a href="/cowork/admin/annuaire-client"
+                       class="w-full text-purple-500 p-2 flex justify-center items-center">Annuaire des
+                        clients</a>
+                </li>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a href="/cowork/admin/gestion-espaces"
+                       class="w-full text-purple-500 p-2 flex justify-center items-center">Gestion des
+                        espaces</a>
+                </li>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a href="/cowork/admin/gestion-forfaits"
+                       class="w-full text-purple-500 p-2 flex justify-center items-center">Gestion des
+                        forfaits</a>
+                </li>
+                    <% } %>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a href="/cowork/mes-reservations"
+                       class="w-full p-2 text-blue-500 flex justify-center items-center">Mes réservations</a>
+                </li>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a href="/cowork/logout" class="w-full p-2 text-red-500 flex justify-center items-center">Déconnexion</a>
+                </li>
+                    <% } %>
         </div>
     </div>
 </header>
@@ -145,6 +190,16 @@
             menu.style.height = '0px';
             buttonMenuOpen.classList.remove('hidden');
             buttonMenuClose.classList.add('hidden');
+        }
+    }
+
+    function togglePop() {
+        console.log('toggle');
+        const popover = document.getElementById('popover');
+        if (popover.classList.contains('hidden')) {
+            popover.classList.remove('hidden');
+        } else {
+            popover.classList.add('hidden');
         }
     }
 </script>

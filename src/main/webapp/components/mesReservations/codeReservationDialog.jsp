@@ -22,6 +22,7 @@
         // Encoder en base64 pour l'inclure dans une balise <img>
         qrCodeBase64 = Base64.getEncoder().encodeToString(qrCodeBytes);
     } catch (Exception e) {
+        System.out.println("Erreur lors de la génération du QR code : " + e.getMessage());
         e.printStackTrace();
     }
 %>

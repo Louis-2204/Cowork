@@ -4,6 +4,11 @@
 <%@ page import="java.util.Objects" %>
 
 <%
+    User loggedInUser = (User) session.getAttribute("loggedInUser");
+    if (loggedInUser == null || !loggedInUser.getIs_admin()) {
+        return;
+    }
+
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
@@ -48,7 +53,7 @@
 %>
 
 <div class="py-24 sm:py-32 w-full">
-    <div class="mx-auto grid max-w-7xl gap-6 px-6 lg:px-8 xl:grid-cols-3">
+    <div class="mx-auto grid max-w-7xl gap-6 px-6 lg:px-8">
         <h2 class="text-pretty text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl mb-4">Annuaire Client</h2>
         <div class="mb-8">
             <!-- Barre de recherche -->
@@ -56,11 +61,11 @@
                    placeholder="Rechercher un client">
         </div>
 
-        <div role="list" class="grid gap-x-6 gap-y-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 xl:col-span-2" id="userList">
+        <div role="list" class="w-full grid gap-x-6 gap-y-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 xl:col-span-2" id="userList">
             <% for (User user : users) {
                 String initiales = (user.getNom().substring(0, 1) + user.getPrenom().substring(0, 1)).toUpperCase();
             %>
-            <a href="${pageContext.request.contextPath}/annuaire-client?showModal=true&selectedUserId=<%= user.getId_user() %>" id="liste<%= user.getId_user() %>" class="bg-white p-8 rounded-lg shadow-md w-3/4 h-64 userItem"
+            <a href="${pageContext.request.contextPath}/admin/annuaire-client?showModal=true&selectedUserId=<%= user.getId_user() %>" id="liste<%= user.getId_user() %>" class="bg-white p-8 rounded-lg shadow-md w-3/4 h-64 userItem"
                data-id="<%= user.getId_user() %>"
                data-prenom="<%= user.getPrenom() %>"
                data-nom="<%= user.getNom() %>"
@@ -93,16 +98,16 @@
         <h2 class="text-xl font-bold mb-4 text-center" id="modalTitle">Informations de l'utilisateur</h2>
         <input type="hidden" id="userIdHidden">
         <label class="font-semibold" for="modalPrenom">Prénom :</label>
-        <p id="modalPrenom"><%= users.get(selectedUserId - 1).getPrenom() %></p>
+        <p id="modalPrenom"><%= users.stream().filter(user -> user.getId_user() == selectedUserId).findFirst().get().getPrenom() %></p>
         <label class="font-semibold" for="modalNom">Nom :</label>
-        <p id="modalNom"><%= users.get(selectedUserId - 1).getNom() %></p>
+        <p id="modalNom"><%= users.stream().filter(user -> user.getId_user() == selectedUserId).findFirst().get().getNom() %></p>
         <label class="font-semibold" for="modalEmail">Email :</label>
-        <p id="modalEmail"><%= users.get(selectedUserId - 1).getEmail() %></p>
+        <p id="modalEmail"><%= users.stream().filter(user -> user.getId_user() == selectedUserId).findFirst().get().getEmail() %></p>
         <label class="font-semibold" for="modalEntreprise">Entreprise :</label>
-        <p id="modalEntreprise"><%= users.get(selectedUserId - 1).getEntreprise() %></p>
+        <p id="modalEntreprise"><%= users.stream().filter(user -> user.getId_user() == selectedUserId).findFirst().get().getEntreprise() %></p>
         <label class="font-semibold" for="modalSecteurActivite">Secteur d'activité :</label>
-        <p id="modalSecteurActivite"><%= users.get(selectedUserId - 1).getSecteur_activte() %></p>
-        <a href="${pageContext.request.contextPath}/annuaire-client?showModal=false" id="closeModal" class="mt-4 px-4 py-2 bg-red-500 text-white w-fit rounded-lg ml-auto">Fermer</a>
+        <p id="modalSecteurActivite"><%= users.stream().filter(user -> user.getId_user() == selectedUserId).findFirst().get().getSecteur_activte() %></p>
+        <a href="${pageContext.request.contextPath}/admin/annuaire-client?showModal=false" id="closeModal" class="mt-4 px-4 py-2 bg-red-500 text-white w-fit rounded-lg ml-auto">Fermer</a>
     </div>
     <% } %>
 </div>

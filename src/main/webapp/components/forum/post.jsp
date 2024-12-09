@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="cowork.Post" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="cowork.User" %>
 <%
+    User user = (User) session.getAttribute("loggedInUser");
     Post post = (Post) request.getAttribute("post");
 %>
 
@@ -50,6 +52,7 @@
     <p class="w-full pl-10">
         <%= post.getContent() %>
     </p>
+    <% if (user != null) { %>
     <div class="w-full flex gap-1">
         <form action="${pageContext.request.contextPath}/PostAnswer" method="POST" class="w-full flex gap-1">
             <input type="hidden" name="id_parent" value="<%= post.getId_post() %>">
@@ -60,6 +63,7 @@
             </button>
         </form>
     </div>
+    <% } %>
 </div>
 <% if (post.getAnswers().size() > 0) { %>
 <div class="w-full flex flex-col gap-2 bg-white rounded-md max-h-[800px] overflow-y-auto p-3 border">
