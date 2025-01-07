@@ -22,6 +22,7 @@ public class UpdateEspace extends HttpServlet {
         String image = request.getParameter("image");
         String nom = request.getParameter("nom");
         int capacite = Integer.parseInt(request.getParameter("capacite"));
+        String equipements = request.getParameter("equipements");
 
 
 
@@ -52,6 +53,43 @@ public class UpdateEspace extends HttpServlet {
 
             // Exécuter la requête
             statement.executeUpdate();
+
+            // split les equipements sur les virgules
+            String[] equipementsArray = equipements.split(",");
+
+            // Préparer la requête SQL
+            String sql3 = "DELETE FROM salles_equipements WHERE id_salle = ?";
+            PreparedStatement statement3 = connection.prepareStatement(sql3);
+            statement3.setInt(1, id_salle);
+            statement3.executeUpdate();
+
+            // Préparer la requête SQL
+            String sql4 = "INSERT INTO equipements (label) VALUES (?)";
+            PreparedStatement statement4 = connection.prepareStatement(sql4);
+            for (String equipement : equipementsArray) {
+                // Remplir les paramètres de la requête avec session user
+                statement4.setString(1, equipement);
+                // Exécuter la requête
+                statement4.executeUpdate();
+            }
+
+            // Préparer la requête SQL
+            String sql5 = "SELECT id_equipement FROM equipements WHERE label = ?";
+            PreparedStatement statement5 = connection.prepareStatement(sql5);
+
+            for (String equipement : equipementsArray) {
+                statement5.setString(1, equipement);
+                resultSet = statement5.executeQuery();
+                resultSet.next();
+                int id_equipement = resultSet.getInt("id_equipement");
+
+                // Préparer la requête SQL
+                String sql6 = "INSERT INTO salles_equipements (id_salle, id_equipement) VALUES (?, ?)";
+                PreparedStatement statement6 = connection.prepareStatement(sql6);
+                statement6.setInt(1, id_salle);
+                statement6.setInt(2, id_equipement);
+                statement6.executeUpdate();
+            }
 
             // Rediriger vers la page de la question
             response.sendRedirect("/cowork/admin/gestion-espaces");

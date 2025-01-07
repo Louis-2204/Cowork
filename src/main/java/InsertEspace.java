@@ -21,10 +21,11 @@ public class InsertEspace extends HttpServlet {
         String image = request.getParameter("image");
         String nom = request.getParameter("nom");
         int capacite = Integer.parseInt(request.getParameter("capacite"));
+        String equipements = request.getParameter("equipements");
 
 
 
-        if (type == null || image == null || nom == null || capacite == 0) {
+        if (type == null || nom == null || capacite == 0) {
             response.sendRedirect("/cowork/admin/gestion-espaces");
             return;
         }
@@ -50,6 +51,47 @@ public class InsertEspace extends HttpServlet {
 
             // Exécuter la requête
             statement.executeUpdate();
+
+            // split les equipements sur les virgules
+            String[] equipementsArray = equipements.split(",");
+
+            System.out.println(equipementsArray);
+
+            // Préparer la requête SQL
+            String sql2 = "SELECT id_salle FROM salles WHERE label = ?";
+            PreparedStatement statement2 = connection.prepareStatement(sql2);
+            statement2.setString(1, nom);
+            resultSet = statement2.executeQuery();
+            resultSet.next();
+            int id = resultSet.getInt("id_salle");
+
+            // Préparer la requête SQL
+            String sql3 = "INSERT INTO equipements (label) VALUES (?)";
+            PreparedStatement statement3 = connection.prepareStatement(sql3);
+            for (String equipement : equipementsArray) {
+                // Remplir les paramètres de la requête avec session user
+                statement3.setString(1, equipement);
+                // Exécuter la requête
+                statement3.executeUpdate();
+            }
+
+            // Préparer la requête SQL
+            String sql4 = "SELECT id_equipement FROM equipements WHERE label = ?";
+            PreparedStatement statement4 = connection.prepareStatement(sql4);
+
+            for (String equipement : equipementsArray) {
+                statement4.setString(1, equipement);
+                resultSet = statement4.executeQuery();
+                resultSet.next();
+                int idEquipement = resultSet.getInt("id_equipement");
+                // Préparer la requête SQL
+                String sql5 = "INSERT INTO salles_equipements (id_salle, id_equipement) VALUES (?, ?)";
+                PreparedStatement statement5 = connection.prepareStatement(sql5);
+                statement5.setInt(1, id);
+                statement5.setInt(2, idEquipement);
+                // Exécuter la requête
+                statement5.executeUpdate();
+            }
 
             // Rediriger vers la page de la question
             response.sendRedirect("/cowork/admin/gestion-espaces");
