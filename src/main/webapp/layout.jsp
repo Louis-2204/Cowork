@@ -74,6 +74,20 @@
                     Connexion
                 </a>
                 <% } else { %>
+                <a href="/cowork/notifications" class="flex items-center gap-1 rounded-md bg-blue-500 bg-opacity-30 mr-3 px-2 py-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-bell" viewBox="0 0 16 16">
+                        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
+                    </svg>
+                    <p id="unread_count" class="text-blue-500"></p>
+                </a>
+                <a href="/cowork/credits" class="flex items-center gap-1 rounded-md bg-orange-500 bg-opacity-30 mr-3 px-2 py-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="orange" class="bi bi-coin" viewBox="0 0 16 16">
+                        <path d="M5.5 9.511c.076.954.83 1.697 2.182 1.785V12h.6v-.709c1.4-.098 2.218-.846 2.218-1.932 0-.987-.626-1.496-1.745-1.76l-.473-.112V5.57c.6.068.982.396 1.074.85h1.052c-.076-.919-.864-1.638-2.126-1.716V4h-.6v.719c-1.195.117-2.01.836-2.01 1.853 0 .9.606 1.472 1.613 1.707l.397.098v2.034c-.615-.093-1.022-.43-1.114-.9zm2.177-2.166c-.59-.137-.91-.416-.91-.836 0-.47.345-.822.915-.925v1.76h-.005zm.692 1.193c.717.166 1.048.435 1.048.91 0 .542-.412.914-1.135.982V8.518z"/>
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                        <path d="M8 13.5a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11m0 .5A6 6 0 1 0 8 2a6 6 0 0 0 0 12"/>
+                    </svg>
+                    <p class="text-orange-500"><%= user.getCredits() %></p>
+                </a>
                 <button class="w-8 h-8 rounded-full bg-gray-400" onclick="togglePop()"></button>
                 <div id="popover" class="absolute top-12 right-0 bg-white shadow-lg rounded-md p-4 hidden w-[175px]">
                     <ul class="mt-2 flex flex-col gap-1">
@@ -202,6 +216,27 @@
             popover.classList.add('hidden');
         }
     }
+
+    function getUnreadCount() {
+        fetch('/cowork/getUnreadCount', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())  // Assurez-vous que la réponse est en JSON
+            .then(data => {
+                const unreadCount = data.count;  // Récupère le nombre de notifications non lues
+                document.getElementById('unread_count').textContent = unreadCount;  // Met à jour le texte du <p>
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+    }
+
+    // Appelle la fonction toutes les secondes
+    setInterval(getUnreadCount, 1000);
+
 </script>
 
 </html>

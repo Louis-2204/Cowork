@@ -152,7 +152,9 @@
 <%
     if (loggedInUser != null) {
         if (!forfaits.isEmpty()) {
+            if (loggedInUser.getCredits() >= 5) {
 %>
+            <p class="text-red-500">Réserver une salle coute 5 crédits !</p>
             <form class="w-full flex flex-col gap-2" action="${pageContext.request.contextPath}/SubmitReservation" method="post">
                 <label>Forfait :</label>
                 <select name="forfaitId" id="selectForfaitId" class="bg-[#F0F0F0] border-[1px] border-[#CACACA] w-full h-[40px]">
@@ -175,6 +177,13 @@
                     Réserver
                 </button>
             </form>
+            <%
+            } else {
+            %>
+            <p class="text-red-500 font-medium">Vous n'avez pas assez de crédit pour réserver cette salle. Cette dernière coute 5 crédits.</p>
+            <%
+                }
+            %>
 <%
         } else {
 %>

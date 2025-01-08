@@ -1,3 +1,4 @@
+import cowork.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,7 +10,7 @@ import java.io.IOException;
 /**
  * Servlet implementation class PageController
  */
-@WebServlet({"/accueil", "/nos-espaces", "/forum", "/FAQ", "/mes-reservations", "/salle", "/nos-forfaits", "/forfait", "/login", "/inscription", "/admin/annuaire-client", "/admin/gestion-espaces", "/admin/gestion-forfaits"})
+@WebServlet({"/accueil", "/nos-espaces", "/forum", "/FAQ", "/mes-reservations", "/salle", "/nos-forfaits", "/forfait", "/login", "/inscription", "/admin/annuaire-client", "/admin/gestion-espaces", "/admin/gestion-forfaits","/credits", "/notifications"})
 public class PageController extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
@@ -18,6 +19,7 @@ public class PageController extends HttpServlet {
         String uri = request.getServletPath(); // Obtenir l'URL demandée
         String page;
         String Title;
+        User user = (User) request.getSession().getAttribute("loggedInUser");
 
         // Ajuster les chemins pour qu'ils pointent correctement vers les JSP
         switch (uri) {
@@ -44,6 +46,24 @@ public class PageController extends HttpServlet {
             case "/mes-reservations":
                 page = "/mes-reservations.jsp";
                 Title = "Mes réservations";
+                break;
+            case "/credits" :
+                if(user==null){
+                    page = "/accueil.jsp";
+                    Title = "Accueil";
+                }else {
+                    page = "/credits.jsp";
+                    Title = "Credits";
+                }
+                break;
+            case "/notifications" :
+                if(user==null){
+                    page = "/accueil.jsp";
+                    Title = "Accueil";
+                }else {
+                    page = "/notifications.jsp";
+                    Title = "Vos notifications";
+                }
                 break;
             case "/salle":
                 // Récupérer le paramètre "id_salle"

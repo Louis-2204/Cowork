@@ -9,6 +9,18 @@ public class User {
     private String entreprise;
     private String secteur_activte;
     private boolean is_admin;
+    private int credits;
+
+    public User (int id_user, String nom, String prenom, String email, String password, String entreprise, String secteur_activte, int credits) {
+        this.id_user = id_user;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.password = password;
+        this.entreprise = entreprise;
+        this.secteur_activte = secteur_activte;
+        this.credits = credits;
+    }
 
 
     public User (int id_user, String nom, String prenom, String email, String password, String entreprise, String secteur_activte) {
@@ -19,21 +31,24 @@ public class User {
         this.password = password;
         this.entreprise = entreprise;
         this.secteur_activte = secteur_activte;
+        this.credits = 0;
     }
 
-    public User (String nom, String prenom, String email, String password, String entreprise, String secteur_activte) {
+    public User (String nom, String prenom, String email, String password, String entreprise, String secteur_activte, int credits) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.password = password;
         this.entreprise = entreprise;
         this.secteur_activte = secteur_activte;
+        this.credits = credits;
     }
 
-    public User(String email, int id_user, boolean is_admin) {
+    public User(String email, int id_user, boolean is_admin, int credits) {
         this.email = email;
         this.id_user = id_user;
         this.is_admin = is_admin;
+        this.credits = credits;
     }
 
 
@@ -62,4 +77,7 @@ public class User {
 
     public boolean getIs_admin() {return is_admin;}
     public void setIs_admin(boolean is_admin) {this.is_admin = is_admin;}
+
+    public int getCredits() {return credits;}
+    public void setCredits(int credits) {this.credits = credits;}
 }

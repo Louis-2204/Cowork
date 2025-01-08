@@ -41,6 +41,16 @@ public class PostAnswer extends HttpServlet {
             // Exécuter la requête
             statement.executeUpdate();
 
+            String query4 = "Insert into notifications (id_user, message, is_read) values ((Select id_user from posts where id_post = ?), ?, false)";
+            PreparedStatement statement4 = connection.prepareStatement(query4);
+            statement4.setInt(1, Integer.parseInt(id_parent));
+            statement4.setString(2, "Vous avez reçu une réponse à votre post");
+            statement4.executeUpdate();
+
+            String query5 = "DELETE FROM notifications WHERE is_read = TRUE AND notification_date < NOW() - INTERVAL '1 month'";
+            PreparedStatement statement5 = connection.prepareStatement(query5);
+            statement5.executeUpdate();
+
             // Rediriger vers la page de la question
             response.sendRedirect("/cowork/forum?id_post=" + id_parent);
         } catch (SQLException e) {
