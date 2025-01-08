@@ -30,7 +30,7 @@
 <header class='w-full flex flex-col items-center bg-white sticky top-0 z-50'>
     <nav class='w-full max-w-[1300px] flex flex-col md:flex-row items-center p-2 h-[56px]'>
         <div class="relative bg-transparent w-full h-full md:w-3/12 flex justify-center md:justify-start items-center">
-            <p class='text-2xl font-bold text-cow_text'>CoWork</p>
+            <p class='text-2xl font-bold text-cow_text !m-0'>CoWork</p>
             <button class="md:hidden absolute right-0" onclick="toggleMenu()">
                 <svg id="buttonMenuOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                      stroke-width="1.5" stroke="currentColor" class="h-7 w-7 text-cow_text">
@@ -45,24 +45,25 @@
         </div>
         <div class="w-full md:w-9/12 flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 h-0 md:h-auto overflow-hidden md:overflow-visible">
             <div class="w-full md:w-6/12 min-w-fit">
-                <ul class='list-none flex flex-col md:flex-row gap-6 items-center justify-end text-base'>
+                <ul class='list-none flex flex-col md:flex-row gap-6 items-center justify-end text-base !m-0'>
                     <li class="hover:bg-gray-200 rounded-md">
-                        <a class="w-full p-2 flex justify-center items-center"
+                        <a class="w-full p-2 flex justify-center items-center text-black no-underline"
                            href="/cowork/accueil">Accueil</a>
                     </li>
                     <li class="hover:bg-gray-200 rounded-md">
-                        <a class="w-full p-2 flex justify-center items-center"
+                        <a class="w-full p-2 flex justify-center items-center text-black no-underline"
                            href="/cowork/nos-espaces?type=%25&dateDeb=&dateFin=">Espaces</a>
                     </li>
                     <li class="hover:bg-gray-200 rounded-md">
-                        <a class="w-full p-2 flex justify-center items-center" href="/cowork/nos-forfaits">Forfaits</a>
+                        <a class="w-full p-2 flex justify-center items-center text-black no-underline"
+                           href="/cowork/nos-forfaits">Forfaits</a>
                     </li>
                     <li class="hover:bg-gray-200 rounded-md">
-                        <a class="w-full p-2 flex justify-center items-center"
+                        <a class="w-full p-2 flex justify-center items-center text-black no-underline"
                            href="/cowork/forum">Forum</a>
                     </li>
                     <li class="hover:bg-gray-200 rounded-md">
-                        <a class="w-full p-2 flex justify-center items-center"
+                        <a class="w-full p-2 flex justify-center items-center text-black no-underline"
                            href="/cowork/FAQ">FAQ</a>
                     </li>
                 </ul>
@@ -84,9 +85,12 @@
                             espaces</a></li>
                         <li><a href="/cowork/admin/gestion-forfaits" class="text-purple-500 hover:underline">Gestion des
                             forfaits</a></li>
-                        <% } %>
+                        <li><a href="/cowork/admin/statistiques"
+                               class="text-purple-500 hover:underline">Statistiques</a>
+                                <% } %>
                         <li><a href="/cowork/mes-reservations" class="text-blue-500 hover:underline">Mes
                             réservations</a></li>
+                        <li><a href="/cowork/factures" class="text-blue-500 hover:underline">Mes factures</a></li>
                         <li><a href="/cowork/logout" class="text-red-500 hover:underline">Déconnexion</a></li>
                     </ul>
                 </div>
@@ -141,10 +145,17 @@
                        class="w-full text-purple-500 p-2 flex justify-center items-center">Gestion des
                         forfaits</a>
                 </li>
-                    <% } %>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a href="/cowork/admin/statistiques"
+                       class="w-full text-purple-500 p-2 flex justify-center items-center">Statistiques</a>
+                        <% } %>
                 <li class="w-full hover:bg-gray-200 rounded-sm">
                     <a href="/cowork/mes-reservations"
                        class="w-full p-2 text-blue-500 flex justify-center items-center">Mes réservations</a>
+                </li>
+                <li class="w-full hover:bg-gray-200 rounded-sm">
+                    <a href="/cowork/factures"
+                       class="w-full p-2 text-blue-500 flex justify-center items-center">Mes factures</a>
                 </li>
                 <li class="w-full hover:bg-gray-200 rounded-sm">
                     <a href="/cowork/logout" class="w-full p-2 text-red-500 flex justify-center items-center">Déconnexion</a>

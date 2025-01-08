@@ -1,3 +1,4 @@
+import cowork.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,7 +10,7 @@ import java.io.IOException;
 /**
  * Servlet implementation class PageController
  */
-@WebServlet({"/accueil", "/nos-espaces", "/forum", "/FAQ", "/mes-reservations", "/salle", "/nos-forfaits", "/forfait", "/login", "/inscription", "/admin/annuaire-client", "/admin/gestion-espaces", "/admin/gestion-forfaits"})
+@WebServlet({"/accueil", "/nos-espaces", "/forum", "/FAQ", "/mes-reservations", "/salle", "/nos-forfaits", "/forfait", "/login", "/inscription", "/admin/annuaire-client", "/admin/gestion-espaces", "/admin/gestion-forfaits" ,"/factures", "/admin/statistiques"})
 public class PageController extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
@@ -76,6 +77,10 @@ public class PageController extends HttpServlet {
                 page = "/admin/gestion-forfaits.jsp";
                 Title = "Gestion Forfaits";
                 break;
+            case "/admin/statistiques":
+                page = "/admin/statistiques.jsp";
+                Title = "Statistiques";
+                break;
             case "/login":
                 page = "/login.jsp";
                 Title = "Login";
@@ -87,6 +92,15 @@ public class PageController extends HttpServlet {
             case "/admin/annuaire-client":
                 page = "/admin/annuaire-client.jsp";
                 Title = "Annuaire Client";
+                break;
+            case "/factures":
+                User user = (User) request.getSession().getAttribute("loggedInUser");
+                if (user == null) {
+                    response.sendRedirect("/cowork//login");
+                    return;
+                }
+                page = "/factures.jsp";
+                Title = "Factures";
                 break;
             default:
                 page = "/404.jsp"; // Page par défaut ou erreur

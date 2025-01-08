@@ -21,42 +21,66 @@ public class SubscribeForfait extends HttpServlet {
         int idUserLogged = Integer.parseInt(request.getParameter("userId"));
         String message = "";
 
-        try{
+        try {
             // Récupérer la connexion à la base de données
             Connection connection = DatabaseConnection.getInstance();
             PreparedStatement preparedStatement = null;
             ResultSet resultForfait = null;
 
-            if(action.equals("subscribe")){
-                // Requête SQL pour souscrire un forfait
-                String query = "Insert into users_forfaits (id_forfait, id_user, subscribed_at) values (?, ?, ?)";
+            if(action.equals("subscribe")) {
+                // D'abord récupérer les informations du forfait
+                String queryForfait = "SELECT label, prix FROM forfaits WHERE id_forfait = ?";
+                preparedStatement = connection.prepareStatement(queryForfait);
+                preparedStatement.setInt(1, Integer.parseInt(idForfait));
+                resultForfait = preparedStatement.executeQuery();
 
-                // Préparer la requête
+                if(resultForfait.next()) {
+                    String libelleForfait = resultForfait.getString("label");
+                    double montantForfait = resultForfait.getDouble("prix");
+
+                    // Commencer une transaction
+                    connection.setAutoCommit(false);
+
+                    try {
+                        // 1. Insérer la souscription
+                        String querySubscribe = "INSERT INTO users_forfaits (id_forfait, id_user, subscribed_at) VALUES (?, ?, ?)";
+                        preparedStatement = connection.prepareStatement(querySubscribe);
+                        preparedStatement.setInt(1, Integer.parseInt(idForfait));
+                        preparedStatement.setInt(2, idUserLogged);
+                        preparedStatement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+                        preparedStatement.executeUpdate();
+
+                        // 2. Créer la facture
+                        String queryFacture = "INSERT INTO factures (libelle, montant, id_user) VALUES (?, ?, ?)";
+                        preparedStatement = connection.prepareStatement(queryFacture);
+                        preparedStatement.setString(1, "Souscription - " + libelleForfait);
+                        preparedStatement.setDouble(2, montantForfait);
+                        preparedStatement.setInt(3, idUserLogged);
+                        preparedStatement.executeUpdate();
+
+                        // Valider la transaction
+                        connection.commit();
+                        message = "Souscription réalisée avec succès";
+                    } catch (Exception e) {
+                        // En cas d'erreur, annuler la transaction
+                        connection.rollback();
+                        throw e;
+                    } finally {
+                        // Rétablir l'auto-commit
+                        connection.setAutoCommit(true);
+                    }
+                } else {
+                    throw new Exception("Forfait non trouvé");
+                }
+            } else if(action.equals("unsubscribe")) {
+                // Requête SQL pour désabonner un forfait
+                String query = "DELETE FROM users_forfaits WHERE id_forfait = ? AND id_user = ?";
                 preparedStatement = connection.prepareStatement(query);
                 preparedStatement.setInt(1, Integer.parseInt(idForfait));
                 preparedStatement.setInt(2, idUserLogged);
-                preparedStatement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
-
-                // Exécuter la requête
                 preparedStatement.executeUpdate();
-                message = "Souscription réalisée avec succès";
-
-            }else{
-                if(action.equals("unsubscribe")){
-                    // Requête SQL pour désabonner un forfait
-                    String query = "Delete from users_forfaits where id_forfait = ? and id_user = ?";
-
-                    // Préparer la requête
-                    preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setInt(1, Integer.parseInt(idForfait));
-                    preparedStatement.setInt(2, idUserLogged);
-
-                    // Exécuter la requête
-                    preparedStatement.executeUpdate();
-                    message = "Votre souscription à été annulée avec succès";
-                }
+                message = "Votre souscription a été annulée avec succès";
             }
-
 
             // Encoder les paramètres pour les inclure dans l'URL
             String encodedIdForfait = URLEncoder.encode(idForfait, StandardCharsets.UTF_8);
@@ -68,7 +92,7 @@ public class SubscribeForfait extends HttpServlet {
 
             // Rediriger vers la page /nos-espaces avec les paramètres
             response.sendRedirect(redirectUrl);
-        }catch(Exception e){
+        } catch(Exception e) {
             String encodedIdForfait = URLEncoder.encode(idForfait, StandardCharsets.UTF_8);
             String encodedMessage = URLEncoder.encode("Erreur lors de la souscription", StandardCharsets.UTF_8);
             String redirectUrl = String.format("/cowork/forfait?id=%s&message=%s",

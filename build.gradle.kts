@@ -28,7 +28,10 @@ dependencies {
 
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.2")
 
-    implementation("com.google.code.gson:gson:2.7")
+    implementation("com.google.code.gson:gson:2.8.9")
+
+    // pdf generation
+    implementation("com.itextpdf:itext7-core:7.1.15")
 
 }
 
